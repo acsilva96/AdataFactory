@@ -1,0 +1,9 @@
+{
+	"name": "acsivlafactory",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d2b74a59-1651-4b6a-910b-67d0446cf4a7",
+		"tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+	}
+}
