@@ -25,6 +25,22 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Wait5sec",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "MoviesFlow",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 5
+				}
 			}
 		],
 		"annotations": []
