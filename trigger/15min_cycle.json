@@ -1,0 +1,24 @@
+{
+	"name": "15min_cycle",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PatientPipeline",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2021-10-14T17:08:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
