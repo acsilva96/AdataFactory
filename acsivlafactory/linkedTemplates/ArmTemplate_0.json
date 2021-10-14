@@ -253,6 +253,7 @@
 						"frequency": "Minute",
 						"interval": 15,
 						"startTime": "2021-10-14T17:08:00Z",
+						"endTime": "2021-10-15T02:42:00Z",
 						"timeZone": "UTC"
 					}
 				}
@@ -280,6 +281,7 @@
 					"frequency": "Minute",
 					"interval": 15,
 					"startTime": "2021-10-14T17:10:00Z",
+					"endTime": "2021-10-15T03:42:00Z",
 					"delay": "00:00:00",
 					"maxConcurrency": 50,
 					"retryPolicy": {
