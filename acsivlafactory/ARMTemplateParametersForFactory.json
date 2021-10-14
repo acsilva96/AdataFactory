@@ -8,6 +8,9 @@
 		"ADLS gen2_accountKey": {
 			"value": ""
 		},
+		"InputDataset_connectionString": {
+			"value": ""
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"value": "https://tutorialstorageacsilva.dfs.core.windows.net"
 		}
