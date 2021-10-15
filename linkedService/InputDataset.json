@@ -12,6 +12,10 @@
 				},
 				"secretName": "SASblobSAS"
 			}
+		},
+		"connectVia": {
+			"referenceName": "IRabroad",
+			"type": "IntegrationRuntimeReference"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/linkedservices"
