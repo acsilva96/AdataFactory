@@ -15,17 +15,21 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
 		},
+		"AzureSqlDatabase2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase2'"
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.dfs.core.windows.net"
 		},
-		"InputDataset_properties_typeProperties_sasUri_secretName": {
-			"type": "string",
-			"defaultValue": "SASblobSAS"
-		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://mypandorasecrets.vault.azure.net/"
+		},
+		"InputDataset_properties_typeProperties_sasUri_secretName": {
+			"type": "string",
+			"defaultValue": "SASblobSAS"
 		},
 		"containerUri": {
 			"type": "string",
@@ -60,6 +64,9 @@
 					"AzureSqlDatabase1_connectionString": {
 						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
 					},
+					"AzureSqlDatabase2_connectionString": {
+						"value": "[parameters('AzureSqlDatabase2_connectionString')]"
+					},
 					"ADLS gen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLS gen2_properties_typeProperties_url')]"
 					},
@@ -72,6 +79,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "acsivlafactory_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_0')]"
+			]
 		}
 	]
 }
