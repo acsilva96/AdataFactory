@@ -216,7 +216,7 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
-					"table": "Azure Blob Storage file"
+					"table": "emp"
 				}
 			},
 			"dependsOn": [
