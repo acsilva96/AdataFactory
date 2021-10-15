@@ -1,0 +1,24 @@
+{
+	"name": "10sec_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "BlobToSql",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 1,
+				"startTime": "2021-10-15T16:01:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
