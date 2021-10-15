@@ -10,7 +10,7 @@
 					"referenceName": "AzureKeyVault",
 					"type": "LinkedServiceReference"
 				},
-				"secretName": "BlobSAS"
+				"secretName": "SASblobSAS"
 			}
 		}
 	},
