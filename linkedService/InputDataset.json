@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"serviceEndpoint": "https://tutorialstorageacsilva.blob.core.windows.net",
+			"serviceEndpoint": "https://storageacsilvacentralus.blob.core.windows.net",
 			"accountKind": "StorageV2"
 		},
 		"connectVia": {
