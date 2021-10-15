@@ -8,11 +8,14 @@
 		"ADLS gen2_accountKey": {
 			"value": ""
 		},
-		"InputDataset_connectionString": {
-			"value": ""
-		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"value": "https://tutorialstorageacsilva.dfs.core.windows.net"
+		},
+		"InputDataset_properties_typeProperties_sasUri_secretName": {
+			"value": "BlobSAS"
+		},
+		"AzureKeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://mypandorasecrets.vault.azure.net/"
 		}
 	}
 }
