@@ -12,10 +12,6 @@
 				},
 				"secretName": "BlobSAS"
 			}
-		},
-		"connectVia": {
-			"referenceName": "WestEUIR",
-			"type": "IntegrationRuntimeReference"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/linkedservices"
