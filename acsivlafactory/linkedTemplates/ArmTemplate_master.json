@@ -23,6 +23,10 @@
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.dfs.core.windows.net"
 		},
+		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
+			"type": "string",
+			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://mypandorasecrets.vault.azure.net/"
@@ -30,10 +34,6 @@
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"type": "string",
 			"defaultValue": "SASblobSAS"
-		},
-		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
-			"type": "string",
-			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -77,11 +77,11 @@
 					"AzureKeyVault_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault_properties_typeProperties_baseUrl')]"
 					},
-					"InputDataset_properties_typeProperties_sasUri_secretName": {
-						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"
-					},
 					"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 						"value": "[parameters('AzureBlobStorage1_properties_typeProperties_serviceEndpoint')]"
+					},
+					"InputDataset_properties_typeProperties_sasUri_secretName": {
+						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"
 					}
 				}
 			},

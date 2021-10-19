@@ -17,14 +17,14 @@
 		"ADLS gen2_properties_typeProperties_url": {
 			"value": "https://tutorialstorageacsilva.dfs.core.windows.net"
 		},
+		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
+			"value": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"value": "https://mypandorasecrets.vault.azure.net/"
 		},
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"value": "SASblobSAS"
-		},
-		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
-			"value": "https://tutorialstorageacsilva.blob.core.windows.net"
 		},
 		"containerUri": {
 			"value": ""
