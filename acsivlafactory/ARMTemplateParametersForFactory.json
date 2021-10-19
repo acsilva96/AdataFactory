@@ -22,6 +22,9 @@
 		},
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"value": "SASblobSAS"
+		},
+		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
+			"value": "https://tutorialstorageacsilva.blob.core.windows.net"
 		}
 	}
 }
