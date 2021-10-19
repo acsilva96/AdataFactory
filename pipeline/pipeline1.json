@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copy1",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -51,7 +51,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "Copy1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -72,10 +72,8 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"message": "@{activity('Copy data1').output.dataWritten}",
-						"dataFactoryName": "@{pipeline().DataFactory}",
-						"pipelineName": "@{pipeline().Pipeline}",
-						"receiver": "@pipeline().parameters.receiver"
+						"value": "{\n    \"message\": \"@{activity('Copy1').output.dataWritten}\",\n    \"dataFactoryName\": \"@{pipeline().DataFactory}\",\n    \"pipelineName\": \"@{pipeline().Pipeline}\",\n    \"receiver\": \"@pipeline().parameters.receiver\"\n}",
+						"type": "Expression"
 					}
 				}
 			},
@@ -84,7 +82,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "Copy1",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -105,10 +103,8 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"message": "@{activity('Copy1').error.message}",
-						"dataFactoryName": "@{pipeline().DataFactory}",
-						"pipelineName": "@{pipeline().Pipeline}",
-						"receiver": "@pipeline().parameters.receiver"
+						"value": "{\n    \"message\": \"@{activity('Copy1').error.message}\",\n    \"dataFactoryName\": \"@{pipeline().DataFactory}\",\n    \"pipelineName\": \"@{pipeline().Pipeline}\",\n    \"receiver\": \"@pipeline().parameters.receiver\"\n}",
+						"type": "Expression"
 					}
 				}
 			}
