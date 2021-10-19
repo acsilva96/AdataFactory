@@ -1,0 +1,24 @@
+{
+	"name": "SinkBlobDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@CONCAT(pipeline().RunId, '.txt')",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@pipeline().parameters.sinkBlobContainer",
+					"type": "Expression"
+				}
+			}
+		}
+	}
+}
