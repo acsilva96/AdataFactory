@@ -1,0 +1,16 @@
+{
+	"name": "AzureSqlTable104",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase101",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "schematic",
+			"table": "PQexcelNAcloud"
+		}
+	}
+}
