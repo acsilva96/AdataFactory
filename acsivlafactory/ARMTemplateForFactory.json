@@ -488,7 +488,12 @@
 							{
 								"referenceName": "DelimitedTextSQLtoFILE101",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"FileName": {
+										"value": "@concat(pipeline().parameters.DBName,'.txt')",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
@@ -871,11 +876,20 @@
 					"referenceName": "AzureBlobStorage4",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"FileName": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
 						"container": "adftutorial"
 					},
 					"columnDelimiter": ",",

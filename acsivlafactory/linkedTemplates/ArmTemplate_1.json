@@ -382,7 +382,12 @@
 							{
 								"referenceName": "DelimitedTextSQLtoFILE101",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"FileName": {
+										"value": "@concat(pipeline().parameters.DBName,'.txt')",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
