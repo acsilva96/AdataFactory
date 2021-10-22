@@ -26,7 +26,6 @@
 					"enableStaging": false,
 					"parallelCopies": 1,
 					"validateDataConsistency": false,
-					"dataIntegrationUnits": 32,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
