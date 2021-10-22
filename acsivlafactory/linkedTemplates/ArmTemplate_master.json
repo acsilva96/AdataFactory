@@ -23,6 +23,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage4'"
 		},
+		"AzureBlobStorage5_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage5'"
+		},
+		"AzureBlobStorage6_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage6'"
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCSVs'"
@@ -38,6 +46,18 @@
 		"AzureSqlDatabase101_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase101'"
+		},
+		"AzureSqlDatabase102_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase102'"
+		},
+		"AzureSqlDatabase103_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase103'"
+		},
+		"AzureSqlDatabase104_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase104'"
 		},
 		"AzureSqlDatabase2_connectionString": {
 			"type": "secureString",
@@ -98,6 +118,12 @@
 					"AzureBlobStorage4_connectionString": {
 						"value": "[parameters('AzureBlobStorage4_connectionString')]"
 					},
+					"AzureBlobStorage5_connectionString": {
+						"value": "[parameters('AzureBlobStorage5_connectionString')]"
+					},
+					"AzureBlobStorage6_connectionString": {
+						"value": "[parameters('AzureBlobStorage6_connectionString')]"
+					},
 					"AzureBlobStorageCSVs_connectionString": {
 						"value": "[parameters('AzureBlobStorageCSVs_connectionString')]"
 					},
@@ -109,6 +135,15 @@
 					},
 					"AzureSqlDatabase101_connectionString": {
 						"value": "[parameters('AzureSqlDatabase101_connectionString')]"
+					},
+					"AzureSqlDatabase102_connectionString": {
+						"value": "[parameters('AzureSqlDatabase102_connectionString')]"
+					},
+					"AzureSqlDatabase103_connectionString": {
+						"value": "[parameters('AzureSqlDatabase103_connectionString')]"
+					},
+					"AzureSqlDatabase104_connectionString": {
+						"value": "[parameters('AzureSqlDatabase104_connectionString')]"
 					},
 					"AzureSqlDatabase2_connectionString": {
 						"value": "[parameters('AzureSqlDatabase2_connectionString')]"

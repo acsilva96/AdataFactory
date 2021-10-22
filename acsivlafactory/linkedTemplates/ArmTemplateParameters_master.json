@@ -17,6 +17,12 @@
 		"AzureBlobStorage4_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage5_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorage6_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"value": ""
 		},
@@ -27,6 +33,15 @@
 			"value": ""
 		},
 		"AzureSqlDatabase101_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase102_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase103_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase104_connectionString": {
 			"value": ""
 		},
 		"AzureSqlDatabase2_connectionString": {
