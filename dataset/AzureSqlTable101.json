@@ -3,10 +3,7 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase101",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"DBName": "myacsilvadb"
-			}
+			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
