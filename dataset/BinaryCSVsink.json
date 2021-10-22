@@ -15,8 +15,16 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().FileName",
+					"type": "Expression"
+				},
 				"folderPath": "SINK",
 				"container": "test"
+			},
+			"compression": {
+				"type": "ZipDeflate",
+				"level": "Fastest"
 			}
 		}
 	}
