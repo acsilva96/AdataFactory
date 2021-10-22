@@ -27,6 +27,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCSVs'"
 		},
+		"AzureBlobStorageSOURCEcsv_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSOURCEcsv'"
+		},
+		"AzureBlobStorage3_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage3'"
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.dfs.core.windows.net"
@@ -84,6 +92,12 @@
 					},
 					"AzureBlobStorageCSVs_connectionString": {
 						"value": "[parameters('AzureBlobStorageCSVs_connectionString')]"
+					},
+					"AzureBlobStorageSOURCEcsv_connectionString": {
+						"value": "[parameters('AzureBlobStorageSOURCEcsv_connectionString')]"
+					},
+					"AzureBlobStorage3_connectionString": {
+						"value": "[parameters('AzureBlobStorage3_connectionString')]"
 					},
 					"ADLS gen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLS gen2_properties_typeProperties_url')]"
