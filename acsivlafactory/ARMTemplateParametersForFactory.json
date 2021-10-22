@@ -14,6 +14,12 @@
 		"AzureSqlDatabase2_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage2_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorageCSVs_connectionString": {
+			"value": ""
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"value": "https://tutorialstorageacsilva.dfs.core.windows.net"
 		},
