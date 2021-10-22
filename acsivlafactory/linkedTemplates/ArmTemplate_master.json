@@ -35,9 +35,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCSVs'"
 		},
+		"AzureBlobStorageMINECRAFT_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageMINECRAFT'"
+		},
 		"AzureBlobStorageSOURCEcsv_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSOURCEcsv'"
+		},
+		"AzureHDInsightLinkedService_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'AzureHDInsightLinkedService'"
+		},
+		"AzureHDInsightLinkedService_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'AzureHDInsightLinkedService'"
+		},
+		"AzureHDInsightLinkedService_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureHDInsightLinkedService'"
 		},
 		"AzureSqlDatabase1_connectionString": {
 			"type": "secureString",
@@ -70,6 +86,26 @@
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "0cd04847-61eb-4fb9-8232-34a3b213b751"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "tutorial-mappingDataFlow"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "cba78d1e-c7ff-401b-a2df-60c3bd3cd8b3"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
+			"type": "string",
+			"defaultValue": "hdinsightcluster"
 		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -127,6 +163,9 @@
 					"AzureBlobStorageCSVs_connectionString": {
 						"value": "[parameters('AzureBlobStorageCSVs_connectionString')]"
 					},
+					"AzureBlobStorageMINECRAFT_connectionString": {
+						"value": "[parameters('AzureBlobStorageMINECRAFT_connectionString')]"
+					},
 					"AzureBlobStorageSOURCEcsv_connectionString": {
 						"value": "[parameters('AzureBlobStorageSOURCEcsv_connectionString')]"
 					},
@@ -172,8 +211,32 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureHDInsightLinkedService_clusterPassword": {
+						"value": "[parameters('AzureHDInsightLinkedService_clusterPassword')]"
+					},
+					"AzureHDInsightLinkedService_clusterSshPassword": {
+						"value": "[parameters('AzureHDInsightLinkedService_clusterSshPassword')]"
+					},
+					"AzureHDInsightLinkedService_servicePrincipalKey": {
+						"value": "[parameters('AzureHDInsightLinkedService_servicePrincipalKey')]"
+					},
 					"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 						"value": "[parameters('AzureBlobStorage1_properties_typeProperties_serviceEndpoint')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_tenant')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterUserName')]"
 					},
 					"InputDataset_properties_typeProperties_sasUri_secretName": {
 						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"

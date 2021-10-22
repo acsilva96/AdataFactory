@@ -7,9 +7,41 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "acsivlafactory"
 		},
+		"AzureHDInsightLinkedService_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'AzureHDInsightLinkedService'"
+		},
+		"AzureHDInsightLinkedService_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'AzureHDInsightLinkedService'"
+		},
+		"AzureHDInsightLinkedService_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureHDInsightLinkedService'"
+		},
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "0cd04847-61eb-4fb9-8232-34a3b213b751"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "tutorial-mappingDataFlow"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "cba78d1e-c7ff-401b-a2df-60c3bd3cd8b3"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
+			"type": "string",
+			"defaultValue": "hdinsightcluster"
 		},
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"type": "string",
@@ -20,6 +52,36 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable101')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase101",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": {
+							"value": "@dataset().DBName",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"DBName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "emp"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlTable102')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -152,6 +214,28 @@
 				"typeProperties": {
 					"schema": "SalesLT",
 					"table": "SalesOrderDetailDUPLICATE"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable104')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase101",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": "myacsilvadb"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "PQexcelNAcloud"
 				}
 			},
 			"dependsOn": []
@@ -461,6 +545,48 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureHDInsightLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsightOnDemand",
+				"typeProperties": {
+					"clusterType": "spark",
+					"clusterSize": 4,
+					"timeToLive": "00:15:00",
+					"version": "4.0",
+					"hostSubscriptionId": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId')]",
+					"clusterResourceGroup": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup')]",
+					"servicePrincipalId": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId')]",
+					"tenant": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_tenant')]",
+					"clusterNamePrefix": "",
+					"clusterUserName": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterUserName')]",
+					"clusterPassword": {
+						"type": "SecureString",
+						"value": "[parameters('AzureHDInsightLinkedService_clusterPassword')]"
+					},
+					"clusterSshPassword": {
+						"type": "SecureString",
+						"value": "[parameters('AzureHDInsightLinkedService_clusterSshPassword')]"
+					},
+					"sparkVersion": "",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureHDInsightLinkedService_servicePrincipalKey')]"
+					},
+					"linkedServiceName": {
+						"referenceName": "AzureBlobStorageMINECRAFT",
+						"type": "LinkedServiceReference"
+					},
+					"headNodeSize": "",
+					"dataNodeSize": "",
+					"zookeeperNodeSize": ""
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/InputDataset')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -616,319 +742,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/BinaryConnectionFile')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SQLtoBLOB')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink"
-							},
-							"enableStaging": false,
-							"parallelCopies": 1,
-							"validateDataConsistency": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "SalesOrderID",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "SalesOrderID",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "SalesOrderDetailID",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "SalesOrderDetail",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "OrderQty",
-											"type": "Int16",
-											"physicalType": "smallint"
-										},
-										"sink": {
-											"name": "OrderQty",
-											"type": "Int16",
-											"physicalType": "smallint"
-										}
-									},
-									{
-										"source": {
-											"name": "ProductID",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "ProductID",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "UnitPrice",
-											"type": "Decimal",
-											"physicalType": "money",
-											"scale": 4,
-											"precision": 19
-										},
-										"sink": {
-											"name": "UnitPrice",
-											"type": "Decimal",
-											"physicalType": "money",
-											"scale": 4,
-											"precision": 19
-										}
-									},
-									{
-										"source": {
-											"name": "rowguid",
-											"type": "Guid",
-											"physicalType": "uniqueidentifier"
-										},
-										"sink": {
-											"name": "rowguid",
-											"type": "Guid",
-											"physicalType": "uniqueidentifier"
-										}
-									},
-									{
-										"source": {
-											"name": "ModifiedDate",
-											"type": "DateTime",
-											"physicalType": "datetime"
-										},
-										"sink": {
-											"name": "ModifiedDate",
-											"type": "DateTime",
-											"physicalType": "datetime"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "AzureSqlTable102",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "AzureSqlTable103",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable102')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable103')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SQLtoFILE')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "AzureSqlTable101",
-								"type": "DatasetReference",
-								"parameters": {
-									"DBName": {
-										"value": "@pipeline().parameters.DBName",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DelimitedTextSQLtoFILE101",
-								"type": "DatasetReference",
-								"parameters": {
-									"FileName": {
-										"value": "@concat(pipeline().parameters.DBName,'.txt')",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"DBName": {
-						"type": "string"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DelimitedTextSQLtoFILE101')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Zipping')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "BinarySource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"wildcardFileName": "*.csv",
-									"deleteFilesAfterCompletion": false
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
-								}
-							},
-							"sink": {
-								"type": "BinarySink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "BinaryCSVsource",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "BinaryCSVsink",
-								"type": "DatasetReference",
-								"parameters": {
-									"FileName": {
-										"value": "@{pipeline().TriggerTime}.zip",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/BinaryCSVsource')]",
-				"[concat(variables('factoryId'), '/datasets/BinaryCSVsink')]"
 			]
 		}
 	]

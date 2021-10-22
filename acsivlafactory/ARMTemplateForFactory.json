@@ -35,9 +35,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCSVs'"
 		},
+		"AzureBlobStorageMINECRAFT_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageMINECRAFT'"
+		},
 		"AzureBlobStorageSOURCEcsv_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSOURCEcsv'"
+		},
+		"AzureHDInsightLinkedService_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'AzureHDInsightLinkedService'"
+		},
+		"AzureHDInsightLinkedService_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'AzureHDInsightLinkedService'"
+		},
+		"AzureHDInsightLinkedService_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureHDInsightLinkedService'"
 		},
 		"AzureSqlDatabase1_connectionString": {
 			"type": "secureString",
@@ -70,6 +86,26 @@
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "0cd04847-61eb-4fb9-8232-34a3b213b751"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "tutorial-mappingDataFlow"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "cba78d1e-c7ff-401b-a2df-60c3bd3cd8b3"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
+			"type": "string",
+			"defaultValue": "hdinsightcluster"
 		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -899,6 +935,68 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Power Query1",
+						"type": "ExecuteWranglingDataflow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "powerquery2",
+								"type": "DataFlowReference",
+								"datasetParameters": {
+									"AzureSqlTable102": {},
+									"SinkAzureSqlTable104": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"queries": [
+								{
+									"queryName": "UserQuery",
+									"dataflowSinks": [
+										{
+											"name": "SinkAzureSqlTable104",
+											"dataset": {
+												"referenceName": "AzureSqlTable104",
+												"type": "DatasetReference",
+												"parameters": {}
+											},
+											"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> SinkAzureSqlTable104"
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/powerquery2')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable104')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlTable101')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1068,6 +1166,30 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase104')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable104')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase101",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": "myacsilvadb"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "PQexcelNAcloud"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase101')]"
 			]
 		},
 		{
@@ -1658,6 +1780,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageMINECRAFT')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorageMINECRAFT_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageSOURCEcsv')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1669,6 +1804,50 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureHDInsightLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsightOnDemand",
+				"typeProperties": {
+					"clusterType": "spark",
+					"clusterSize": 4,
+					"timeToLive": "00:15:00",
+					"version": "4.0",
+					"hostSubscriptionId": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId')]",
+					"clusterResourceGroup": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup')]",
+					"servicePrincipalId": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId')]",
+					"tenant": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_tenant')]",
+					"clusterNamePrefix": "",
+					"clusterUserName": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterUserName')]",
+					"clusterPassword": {
+						"type": "SecureString",
+						"value": "[parameters('AzureHDInsightLinkedService_clusterPassword')]"
+					},
+					"clusterSshPassword": {
+						"type": "SecureString",
+						"value": "[parameters('AzureHDInsightLinkedService_clusterSshPassword')]"
+					},
+					"sparkVersion": "",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureHDInsightLinkedService_servicePrincipalKey')]"
+					},
+					"linkedServiceName": {
+						"referenceName": "AzureBlobStorageMINECRAFT",
+						"type": "LinkedServiceReference"
+					},
+					"headNodeSize": "",
+					"dataNodeSize": "",
+					"zookeeperNodeSize": ""
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageMINECRAFT')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureKeyVault')]",
@@ -1915,6 +2094,31 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/powerquery2')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "WranglingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"name": "AzureSqlTable102",
+							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> AzureSqlTable102",
+							"dataset": {
+								"referenceName": "AzureSqlTable102",
+								"type": "DatasetReference"
+							}
+						}
+					],
+					"script": "section Section1;\r\nshared AzureSqlTable102 = let\r\n  AdfDoc = Sql.Database(\"mysqlserveracsilva.database.windows.net\", \"myacsilvadb\", [CreateNavigationProperties = false]),\r\n  InputTable = AdfDoc{[Schema = \"SalesLT\", Item = \"SalesOrderDetail\"]}[Data]\r\nin\r\n  InputTable;\r\nshared UserQuery = let\r\n  Source = AzureSqlTable102,\r\n  #\"Reordered columns\" = Table.ReorderColumns(Source, {\"SalesOrderID\", \"OrderQty\", \"ProductID\", \"UnitPrice\", \"SalesOrderDetailID\", \"UnitPriceDiscount\", \"LineTotal\", \"rowguid\", \"ModifiedDate\"}),\r\n  #\"Removed columns\" = Table.RemoveColumns(#\"Reordered columns\", {\"SalesOrderDetailID\"}),\r\n  #\"Added custom\" = Table.AddColumn(#\"Removed columns\", \"DAY\", each Date.Day([ModifiedDate]))\r\nin\r\n  #\"Added custom\";\r\n",
+					"documentLocale": "en-us"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable102')]"
+			]
 		}
 	]
 }
