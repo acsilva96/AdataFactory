@@ -1,0 +1,21 @@
+{
+	"name": "BinaryCSVsource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageSOURCEcsv",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "*.csv",
+					"type": "Expression"
+				},
+				"container": "test"
+			}
+		}
+	}
+}
