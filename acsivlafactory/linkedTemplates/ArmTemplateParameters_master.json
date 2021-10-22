@@ -14,6 +14,9 @@
 		"AzureBlobStorage3_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage4_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"value": ""
 		},
@@ -23,13 +26,10 @@
 		"AzureSqlDatabase1_connectionString": {
 			"value": ""
 		},
-		"AzureSqlDatabase2_connectionString": {
-			"value": ""
-		},
 		"AzureSqlDatabase101_connectionString": {
 			"value": ""
 		},
-		"AzureBlobStorage4_connectionString": {
+		"AzureSqlDatabase2_connectionString": {
 			"value": ""
 		},
 		"ADLS gen2_properties_typeProperties_url": {
