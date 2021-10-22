@@ -15,10 +15,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": ".*csv",
-					"type": "Expression"
-				},
+				"folderPath": "SINK",
 				"container": "test"
 			}
 		}
