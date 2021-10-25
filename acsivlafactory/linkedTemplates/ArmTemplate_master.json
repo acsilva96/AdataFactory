@@ -43,17 +43,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSOURCEcsv'"
 		},
-		"AzureHDInsightLinkedService_clusterPassword": {
+		"AzureDatabricks_LinkedService_accessToken": {
 			"type": "secureString",
-			"metadata": "Secure string for 'clusterPassword' of 'AzureHDInsightLinkedService'"
-		},
-		"AzureHDInsightLinkedService_clusterSshPassword": {
-			"type": "secureString",
-			"metadata": "Secure string for 'clusterSshPassword' of 'AzureHDInsightLinkedService'"
-		},
-		"AzureHDInsightLinkedService_servicePrincipalKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureHDInsightLinkedService'"
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks_LinkedService'"
 		},
 		"AzureSqlDatabase1_connectionString": {
 			"type": "secureString",
@@ -79,18 +71,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase2'"
 		},
-		"linkedService1_clusterPassword": {
-			"type": "secureString",
-			"metadata": "Secure string for 'clusterPassword' of 'linkedService1'"
-		},
-		"linkedService1_clusterSshPassword": {
-			"type": "secureString",
-			"metadata": "Secure string for 'clusterSshPassword' of 'linkedService1'"
-		},
-		"linkedService1_servicePrincipalKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'servicePrincipalKey' of 'linkedService1'"
-		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.dfs.core.windows.net"
@@ -99,26 +79,6 @@
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
 		},
-		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
-			"type": "string",
-			"defaultValue": "0cd04847-61eb-4fb9-8232-34a3b213b751"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
-			"type": "string",
-			"defaultValue": "tutorial-mappingDataFlow"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
-			"type": "string",
-			"defaultValue": "cba78d1e-c7ff-401b-a2df-60c3bd3cd8b3"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
-			"type": "string",
-			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
-			"type": "string",
-			"defaultValue": "hdinsightcluster"
-		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://mypandorasecrets.vault.azure.net/"
@@ -126,26 +86,6 @@
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"type": "string",
 			"defaultValue": "SASblobSAS"
-		},
-		"linkedService1_properties_typeProperties_hostSubscriptionId": {
-			"type": "string",
-			"defaultValue": "0cd04847-61eb-4fb9-8232-34a3b213b751"
-		},
-		"linkedService1_properties_typeProperties_clusterResourceGroup": {
-			"type": "string",
-			"defaultValue": "tutorial-mappingDataFlow"
-		},
-		"linkedService1_properties_typeProperties_servicePrincipalId": {
-			"type": "string",
-			"defaultValue": "41aa9ed4-6fad-475d-b890-4d15d2808ad2"
-		},
-		"linkedService1_properties_typeProperties_tenant": {
-			"type": "string",
-			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
-		},
-		"linkedService1_properties_typeProperties_clusterUserName": {
-			"type": "string",
-			"defaultValue": "hdinsightcluster"
 		},
 		"containerUri": {
 			"type": "string",
@@ -201,6 +141,9 @@
 					"AzureBlobStorageSOURCEcsv_connectionString": {
 						"value": "[parameters('AzureBlobStorageSOURCEcsv_connectionString')]"
 					},
+					"AzureDatabricks_LinkedService_accessToken": {
+						"value": "[parameters('AzureDatabricks_LinkedService_accessToken')]"
+					},
 					"AzureSqlDatabase1_connectionString": {
 						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
 					},
@@ -243,59 +186,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureHDInsightLinkedService_clusterPassword": {
-						"value": "[parameters('AzureHDInsightLinkedService_clusterPassword')]"
-					},
-					"AzureHDInsightLinkedService_clusterSshPassword": {
-						"value": "[parameters('AzureHDInsightLinkedService_clusterSshPassword')]"
-					},
-					"AzureHDInsightLinkedService_servicePrincipalKey": {
-						"value": "[parameters('AzureHDInsightLinkedService_servicePrincipalKey')]"
-					},
-					"linkedService1_clusterPassword": {
-						"value": "[parameters('linkedService1_clusterPassword')]"
-					},
-					"linkedService1_clusterSshPassword": {
-						"value": "[parameters('linkedService1_clusterSshPassword')]"
-					},
-					"linkedService1_servicePrincipalKey": {
-						"value": "[parameters('linkedService1_servicePrincipalKey')]"
-					},
 					"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 						"value": "[parameters('AzureBlobStorage1_properties_typeProperties_serviceEndpoint')]"
 					},
-					"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_tenant')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterUserName')]"
-					},
 					"InputDataset_properties_typeProperties_sasUri_secretName": {
 						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"
-					},
-					"linkedService1_properties_typeProperties_hostSubscriptionId": {
-						"value": "[parameters('linkedService1_properties_typeProperties_hostSubscriptionId')]"
-					},
-					"linkedService1_properties_typeProperties_clusterResourceGroup": {
-						"value": "[parameters('linkedService1_properties_typeProperties_clusterResourceGroup')]"
-					},
-					"linkedService1_properties_typeProperties_servicePrincipalId": {
-						"value": "[parameters('linkedService1_properties_typeProperties_servicePrincipalId')]"
-					},
-					"linkedService1_properties_typeProperties_tenant": {
-						"value": "[parameters('linkedService1_properties_typeProperties_tenant')]"
-					},
-					"linkedService1_properties_typeProperties_clusterUserName": {
-						"value": "[parameters('linkedService1_properties_typeProperties_clusterUserName')]"
 					}
 				}
 			},

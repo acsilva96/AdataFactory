@@ -32,13 +32,7 @@
 		"AzureBlobStorageSOURCEcsv_connectionString": {
 			"value": ""
 		},
-		"AzureHDInsightLinkedService_clusterPassword": {
-			"value": ""
-		},
-		"AzureHDInsightLinkedService_clusterSshPassword": {
-			"value": ""
-		},
-		"AzureHDInsightLinkedService_servicePrincipalKey": {
+		"AzureDatabricks_LinkedService_accessToken": {
 			"value": ""
 		},
 		"AzureSqlDatabase1_connectionString": {
@@ -59,56 +53,17 @@
 		"AzureSqlDatabase2_connectionString": {
 			"value": ""
 		},
-		"linkedService1_clusterPassword": {
-			"value": ""
-		},
-		"linkedService1_clusterSshPassword": {
-			"value": ""
-		},
-		"linkedService1_servicePrincipalKey": {
-			"value": ""
-		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"value": "https://tutorialstorageacsilva.dfs.core.windows.net"
 		},
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"value": "https://tutorialstorageacsilva.blob.core.windows.net"
 		},
-		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
-			"value": "0cd04847-61eb-4fb9-8232-34a3b213b751"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
-			"value": "tutorial-mappingDataFlow"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
-			"value": "cba78d1e-c7ff-401b-a2df-60c3bd3cd8b3"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
-			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
-		},
-		"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
-			"value": "hdinsightcluster"
-		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"value": "https://mypandorasecrets.vault.azure.net/"
 		},
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"value": "SASblobSAS"
-		},
-		"linkedService1_properties_typeProperties_hostSubscriptionId": {
-			"value": "0cd04847-61eb-4fb9-8232-34a3b213b751"
-		},
-		"linkedService1_properties_typeProperties_clusterResourceGroup": {
-			"value": "tutorial-mappingDataFlow"
-		},
-		"linkedService1_properties_typeProperties_servicePrincipalId": {
-			"value": "41aa9ed4-6fad-475d-b890-4d15d2808ad2"
-		},
-		"linkedService1_properties_typeProperties_tenant": {
-			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
-		},
-		"linkedService1_properties_typeProperties_clusterUserName": {
-			"value": "hdinsightcluster"
 		},
 		"containerUri": {
 			"value": ""
