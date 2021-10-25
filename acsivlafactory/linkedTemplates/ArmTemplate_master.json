@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage6'"
 		},
+		"AzureBlobStorage7_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage7'"
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCSVs'"
@@ -42,6 +46,10 @@
 		"AzureBlobStorageSOURCEcsv_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSOURCEcsv'"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
 		"AzureDatabricks_LinkedService_accessToken": {
 			"type": "secureString",
@@ -83,6 +91,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase2'"
 		},
+		"linkedService1HDINSIGHT_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'linkedService1HDINSIGHT'"
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.dfs.core.windows.net"
@@ -90,6 +102,10 @@
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://storageacsilva.dfs.core.windows.net"
 		},
 		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
 			"type": "string",
@@ -118,6 +134,10 @@
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"type": "string",
 			"defaultValue": "SASblobSAS"
+		},
+		"linkedService1HDINSIGHT_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "clustername"
 		},
 		"containerUri": {
 			"type": "string",
@@ -164,6 +184,9 @@
 					"AzureBlobStorage6_connectionString": {
 						"value": "[parameters('AzureBlobStorage6_connectionString')]"
 					},
+					"AzureBlobStorage7_connectionString": {
+						"value": "[parameters('AzureBlobStorage7_connectionString')]"
+					},
 					"AzureBlobStorageCSVs_connectionString": {
 						"value": "[parameters('AzureBlobStorageCSVs_connectionString')]"
 					},
@@ -172,6 +195,9 @@
 					},
 					"AzureBlobStorageSOURCEcsv_connectionString": {
 						"value": "[parameters('AzureBlobStorageSOURCEcsv_connectionString')]"
+					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
 					"AzureDatabricks_LinkedService_accessToken": {
 						"value": "[parameters('AzureDatabricks_LinkedService_accessToken')]"
@@ -196,6 +222,9 @@
 					},
 					"ADLS gen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLS gen2_properties_typeProperties_url')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
 					},
 					"AzureKeyVault_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault_properties_typeProperties_baseUrl')]"
@@ -244,9 +273,6 @@
 					},
 					"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
 						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterUserName')]"
-					},
-					"InputDataset_properties_typeProperties_sasUri_secretName": {
-						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"
 					}
 				}
 			},
@@ -267,11 +293,40 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"linkedService1HDINSIGHT_password": {
+						"value": "[parameters('linkedService1HDINSIGHT_password')]"
+					},
+					"InputDataset_properties_typeProperties_sasUri_secretName": {
+						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"
+					},
+					"linkedService1HDINSIGHT_properties_typeProperties_userName": {
+						"value": "[parameters('linkedService1HDINSIGHT_properties_typeProperties_userName')]"
 					}
 				}
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "acsivlafactory_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_2')]"
 			]
 		}
 	]

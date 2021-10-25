@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage6'"
 		},
+		"AzureBlobStorage7_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage7'"
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCSVs'"
@@ -42,6 +46,10 @@
 		"AzureBlobStorageSOURCEcsv_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageSOURCEcsv'"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
 		"AzureDatabricks_LinkedService_accessToken": {
 			"type": "secureString",
@@ -83,6 +91,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase2'"
 		},
+		"linkedService1HDINSIGHT_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'linkedService1HDINSIGHT'"
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.dfs.core.windows.net"
@@ -90,6 +102,10 @@
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://storageacsilva.dfs.core.windows.net"
 		},
 		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
 			"type": "string",
@@ -118,6 +134,10 @@
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"type": "string",
 			"defaultValue": "SASblobSAS"
+		},
+		"linkedService1HDINSIGHT_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "clustername"
 		}
 	},
 	"variables": {
@@ -1075,7 +1095,7 @@
 							}
 						},
 						"linkedServiceName": {
-							"referenceName": "AzureHDInsightLinkedService",
+							"referenceName": "linkedService1HDINSIGHT",
 							"type": "LinkedServiceReference"
 						}
 					}
@@ -1088,7 +1108,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageMINECRAFT')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureHDInsightLinkedService')]"
+				"[concat(variables('factoryId'), '/linkedServices/linkedService1HDINSIGHT')]"
 			]
 		},
 		{
@@ -1502,7 +1522,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/MoviesDB')]",
+			"name": "[concat(parameters('factoryName'), '/MovieSink')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1515,37 +1535,30 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "moviesDB.csv",
+						"folderPath": "output",
 						"fileSystem": "sample-data"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
-					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
 					{
-						"name": "movie",
 						"type": "String"
 					},
 					{
-						"name": "title",
 						"type": "String"
 					},
 					{
-						"name": "genres",
 						"type": "String"
 					},
 					{
-						"name": "year",
 						"type": "String"
 					},
 					{
-						"name": "Rating",
 						"type": "String"
 					},
 					{
-						"name": "Rotton Tomato",
 						"type": "String"
 					}
 				]
@@ -1862,6 +1875,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage7')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage7_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageCSVs')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1896,6 +1922,23 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureBlobStorageSOURCEcsv_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
 				}
 			},
 			"dependsOn": []
@@ -2086,6 +2129,31 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/IRabroad')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/linkedService1HDINSIGHT')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsight",
+				"typeProperties": {
+					"clusterUri": "https://u0e4b3b08-8628-4039-ab51-3db5bb00b0d9.azurehdinsight.net",
+					"userName": "[parameters('linkedService1HDINSIGHT_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('linkedService1HDINSIGHT_password')]"
+					},
+					"isEspEnabled": false,
+					"linkedServiceName": {
+						"referenceName": "AzureBlobStorage7",
+						"type": "LinkedServiceReference"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage7')]"
 			]
 		},
 		{

@@ -23,6 +23,9 @@
 		"AzureBlobStorage6_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage7_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"value": ""
 		},
@@ -30,6 +33,9 @@
 			"value": ""
 		},
 		"AzureBlobStorageSOURCEcsv_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
 		"AzureDatabricks_LinkedService_accessToken": {
@@ -62,11 +68,17 @@
 		"AzureSqlDatabase2_connectionString": {
 			"value": ""
 		},
+		"linkedService1HDINSIGHT_password": {
+			"value": ""
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"value": "https://tutorialstorageacsilva.dfs.core.windows.net"
 		},
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"value": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://storageacsilva.dfs.core.windows.net"
 		},
 		"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
 			"value": "0cd04847-61eb-4fb9-8232-34a3b213b751"
@@ -88,6 +100,9 @@
 		},
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"value": "SASblobSAS"
+		},
+		"linkedService1HDINSIGHT_properties_typeProperties_userName": {
+			"value": "clustername"
 		}
 	}
 }
