@@ -9,7 +9,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "GetTime",
-					"value": ""
+					"value": {
+						"value": "@pipeline().parameters.GetTime",
+						"type": "Expression"
+					}
 				}
 			}
 		],
