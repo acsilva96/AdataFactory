@@ -8,7 +8,7 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "GetTime",
+					"variableName": "TriggerTime",
 					"value": {
 						"value": "@pipeline().parameters.GetTime",
 						"type": "Expression"
@@ -22,7 +22,7 @@
 			}
 		},
 		"variables": {
-			"GetTime": {
+			"TriggerTime": {
 				"type": "String"
 			}
 		},

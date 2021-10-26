@@ -7,9 +7,6 @@
 			"pipelineReference": {
 				"referenceName": "Triggers",
 				"type": "PipelineReference"
-			},
-			"parameters": {
-				"GetTime": "test"
 			}
 		},
 		"type": "TumblingWindowTrigger",
