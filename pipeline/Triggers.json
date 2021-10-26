@@ -1,0 +1,28 @@
+{
+	"name": "Triggers",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "GetTime",
+					"value": ""
+				}
+			}
+		],
+		"parameters": {
+			"GetTime": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"GetTime": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
