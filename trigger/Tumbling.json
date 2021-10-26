@@ -9,7 +9,7 @@
 				"type": "PipelineReference"
 			},
 			"parameters": {
-				"GetTime": "@trigger().outputs.windowStartTime"
+				"GetTime": "@utcnow()"
 			}
 		},
 		"type": "TumblingWindowTrigger",
