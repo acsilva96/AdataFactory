@@ -217,9 +217,6 @@
 					"AzureSqlDatabase104_connectionString": {
 						"value": "[parameters('AzureSqlDatabase104_connectionString')]"
 					},
-					"AzureSqlDatabase2_connectionString": {
-						"value": "[parameters('AzureSqlDatabase2_connectionString')]"
-					},
 					"ADLS gen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLS gen2_properties_typeProperties_url')]"
 					},
@@ -247,32 +244,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureHDInsightLinkedService_clusterPassword": {
-						"value": "[parameters('AzureHDInsightLinkedService_clusterPassword')]"
-					},
-					"AzureHDInsightLinkedService_clusterSshPassword": {
-						"value": "[parameters('AzureHDInsightLinkedService_clusterSshPassword')]"
-					},
-					"AzureHDInsightLinkedService_servicePrincipalKey": {
-						"value": "[parameters('AzureHDInsightLinkedService_servicePrincipalKey')]"
+					"AzureSqlDatabase2_connectionString": {
+						"value": "[parameters('AzureSqlDatabase2_connectionString')]"
 					},
 					"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 						"value": "[parameters('AzureBlobStorage1_properties_typeProperties_serviceEndpoint')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_tenant')]"
-					},
-					"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
-						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterUserName')]"
 					}
 				}
 			},
@@ -294,8 +270,32 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureHDInsightLinkedService_clusterPassword": {
+						"value": "[parameters('AzureHDInsightLinkedService_clusterPassword')]"
+					},
+					"AzureHDInsightLinkedService_clusterSshPassword": {
+						"value": "[parameters('AzureHDInsightLinkedService_clusterSshPassword')]"
+					},
+					"AzureHDInsightLinkedService_servicePrincipalKey": {
+						"value": "[parameters('AzureHDInsightLinkedService_servicePrincipalKey')]"
+					},
 					"linkedService1HDINSIGHT_password": {
 						"value": "[parameters('linkedService1HDINSIGHT_password')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterResourceGroup')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_servicePrincipalId')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_tenant": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_tenant')]"
+					},
+					"AzureHDInsightLinkedService_properties_typeProperties_clusterUserName": {
+						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_clusterUserName')]"
 					},
 					"InputDataset_properties_typeProperties_sasUri_secretName": {
 						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"
