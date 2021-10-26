@@ -141,7 +141,11 @@
 		},
 		"Tumbling_properties_pipeline_parameters_GetTime": {
 			"type": "string",
-			"defaultValue": "@trigger().outputs.windowStartTime"
+			"defaultValue": "@utcnow()"
+		},
+		"tumbling1min_properties_pipeline_parameters_GetTime": {
+			"type": "string",
+			"defaultValue": "@utcnow()"
 		},
 		"containerUri": {
 			"type": "string",
@@ -309,6 +313,9 @@
 					},
 					"Tumbling_properties_pipeline_parameters_GetTime": {
 						"value": "[parameters('Tumbling_properties_pipeline_parameters_GetTime')]"
+					},
+					"tumbling1min_properties_pipeline_parameters_GetTime": {
+						"value": "[parameters('tumbling1min_properties_pipeline_parameters_GetTime')]"
 					}
 				}
 			},

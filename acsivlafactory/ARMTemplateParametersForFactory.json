@@ -105,7 +105,10 @@
 			"value": "clustername"
 		},
 		"Tumbling_properties_pipeline_parameters_GetTime": {
-			"value": "@trigger().outputs.windowStartTime"
+			"value": "@utcnow()"
+		},
+		"tumbling1min_properties_pipeline_parameters_GetTime": {
+			"value": "@utcnow()"
 		}
 	}
 }

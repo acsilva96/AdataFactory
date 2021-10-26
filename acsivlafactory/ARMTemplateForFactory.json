@@ -141,7 +141,11 @@
 		},
 		"Tumbling_properties_pipeline_parameters_GetTime": {
 			"type": "string",
-			"defaultValue": "@trigger().outputs.windowStartTime"
+			"defaultValue": "@utcnow()"
+		},
+		"tumbling1min_properties_pipeline_parameters_GetTime": {
+			"type": "string",
+			"defaultValue": "@utcnow()"
 		}
 	},
 	"variables": {
@@ -951,7 +955,7 @@
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"variableName": "GetTime",
+							"variableName": "TriggerTime",
 							"value": {
 								"value": "@pipeline().parameters.GetTime",
 								"type": "Expression"
@@ -969,7 +973,7 @@
 					}
 				},
 				"variables": {
-					"GetTime": {
+					"TriggerTime": {
 						"type": "String"
 					}
 				},
@@ -2367,6 +2371,39 @@
 					"frequency": "Minute",
 					"interval": 15,
 					"startTime": "2021-10-26T09:50:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Triggers')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tumbling1min')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "Triggers",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"GetTime": "[parameters('tumbling1min_properties_pipeline_parameters_GetTime')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Minute",
+					"interval": 5,
+					"startTime": "2021-10-26T10:21:00Z",
 					"delay": "00:00:00",
 					"maxConcurrency": 50,
 					"retryPolicy": {
