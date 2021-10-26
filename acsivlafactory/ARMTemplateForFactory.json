@@ -138,6 +138,10 @@
 		"linkedService1HDINSIGHT_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "clustername"
+		},
+		"Tumbling_properties_pipeline_parameters_GetTime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
 		}
 	},
 	"variables": {
@@ -2340,6 +2344,39 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTable102')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Tumbling')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "Triggers",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"GetTime": "[parameters('Tumbling_properties_pipeline_parameters_GetTime')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Minute",
+					"interval": 15,
+					"startTime": "2021-10-26T09:50:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Triggers')]"
 			]
 		}
 	]

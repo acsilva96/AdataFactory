@@ -103,6 +103,9 @@
 		},
 		"linkedService1HDINSIGHT_properties_typeProperties_userName": {
 			"value": "clustername"
+		},
+		"Tumbling_properties_pipeline_parameters_GetTime": {
+			"value": "@trigger().outputs.windowStartTime"
 		}
 	}
 }

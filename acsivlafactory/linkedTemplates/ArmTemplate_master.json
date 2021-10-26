@@ -139,6 +139,10 @@
 			"type": "string",
 			"defaultValue": "clustername"
 		},
+		"Tumbling_properties_pipeline_parameters_GetTime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -302,6 +306,9 @@
 					},
 					"linkedService1HDINSIGHT_properties_typeProperties_userName": {
 						"value": "[parameters('linkedService1HDINSIGHT_properties_typeProperties_userName')]"
+					},
+					"Tumbling_properties_pipeline_parameters_GetTime": {
+						"value": "[parameters('Tumbling_properties_pipeline_parameters_GetTime')]"
 					}
 				}
 			},
