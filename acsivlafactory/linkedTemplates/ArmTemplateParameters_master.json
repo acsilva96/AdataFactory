@@ -68,7 +68,13 @@
 		"AzureSqlDatabase2_connectionString": {
 			"value": ""
 		},
+		"linkedService1_connectionString": {
+			"value": ""
+		},
 		"linkedService1HDINSIGHT_password": {
+			"value": ""
+		},
+		"linkedService2_connectionString": {
 			"value": ""
 		},
 		"ADLS gen2_properties_typeProperties_url": {

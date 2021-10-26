@@ -91,9 +91,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase2'"
 		},
+		"linkedService1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
+		},
 		"linkedService1HDINSIGHT_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'linkedService1HDINSIGHT'"
+		},
+		"linkedService2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedService2'"
 		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"type": "string",
@@ -255,8 +263,11 @@
 					"AzureSqlDatabase2_connectionString": {
 						"value": "[parameters('AzureSqlDatabase2_connectionString')]"
 					},
-					"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
-						"value": "[parameters('AzureBlobStorage1_properties_typeProperties_serviceEndpoint')]"
+					"linkedService1_connectionString": {
+						"value": "[parameters('linkedService1_connectionString')]"
+					},
+					"linkedService2_connectionString": {
+						"value": "[parameters('linkedService2_connectionString')]"
 					}
 				}
 			},
@@ -289,6 +300,9 @@
 					},
 					"linkedService1HDINSIGHT_password": {
 						"value": "[parameters('linkedService1HDINSIGHT_password')]"
+					},
+					"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
+						"value": "[parameters('AzureBlobStorage1_properties_typeProperties_serviceEndpoint')]"
 					},
 					"AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId": {
 						"value": "[parameters('AzureHDInsightLinkedService_properties_typeProperties_hostSubscriptionId')]"
