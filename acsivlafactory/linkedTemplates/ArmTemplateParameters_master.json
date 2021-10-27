@@ -26,6 +26,9 @@
 		"AzureBlobStorage7_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage8_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"value": ""
 		},
