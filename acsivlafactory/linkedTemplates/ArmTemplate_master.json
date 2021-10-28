@@ -39,6 +39,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage8'"
 		},
+		"AzureBlobStorage9_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage9'"
+		},
 		"AzureBlobStorageCSVs_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCSVs'"
@@ -210,6 +214,9 @@
 					"AzureBlobStorage8_connectionString": {
 						"value": "[parameters('AzureBlobStorage8_connectionString')]"
 					},
+					"AzureBlobStorage9_connectionString": {
+						"value": "[parameters('AzureBlobStorage9_connectionString')]"
+					},
 					"AzureBlobStorageCSVs_connectionString": {
 						"value": "[parameters('AzureBlobStorageCSVs_connectionString')]"
 					},
@@ -230,12 +237,6 @@
 					},
 					"AzureSqlDatabase101_connectionString": {
 						"value": "[parameters('AzureSqlDatabase101_connectionString')]"
-					},
-					"AzureSqlDatabase102_connectionString": {
-						"value": "[parameters('AzureSqlDatabase102_connectionString')]"
-					},
-					"AzureSqlDatabase103_connectionString": {
-						"value": "[parameters('AzureSqlDatabase103_connectionString')]"
 					},
 					"ADLS gen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLS gen2_properties_typeProperties_url')]"
@@ -263,6 +264,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AzureSqlDatabase102_connectionString": {
+						"value": "[parameters('AzureSqlDatabase102_connectionString')]"
+					},
+					"AzureSqlDatabase103_connectionString": {
+						"value": "[parameters('AzureSqlDatabase103_connectionString')]"
 					},
 					"AzureSqlDatabase104_connectionString": {
 						"value": "[parameters('AzureSqlDatabase104_connectionString')]"
