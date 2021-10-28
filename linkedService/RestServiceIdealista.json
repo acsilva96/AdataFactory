@@ -1,0 +1,12 @@
+{
+	"name": "RestServiceIdealista",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://api.idealista.com/3.5/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
