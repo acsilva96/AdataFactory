@@ -494,6 +494,9 @@
 				"defaultValue": "false"
 			}
 		},
+		"folder": {
+			"name": "Idealista"
+		},
 		"annotations": [],
 		"lastPublishTime": "2021-08-24T17:42:34Z"
 	},
