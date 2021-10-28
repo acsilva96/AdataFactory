@@ -77,6 +77,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "Training"
+		},
 		"annotations": []
 	}
 }

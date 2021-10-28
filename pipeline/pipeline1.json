@@ -36,6 +36,9 @@
 				"userProperties": []
 			}
 		],
+		"folder": {
+			"name": "Training"
+		},
 		"annotations": []
 	}
 }

@@ -21,6 +21,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "Training"
+		},
 		"annotations": []
 	}
 }
