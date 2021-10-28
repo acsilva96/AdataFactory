@@ -1,0 +1,12 @@
+{
+	"name": "RestIdealista",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceIdealista",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
