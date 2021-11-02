@@ -1,0 +1,35 @@
+{
+    "name": "ResultIdealista",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "Blob_Idealista",
+            "type": "LinkedServiceReference"
+        },
+        "parameters": {
+            "date": {
+                "type": "string"
+            },
+            "name": {
+                "type": "string"
+            }
+        },
+        "annotations": [],
+        "type": "Json",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobStorageLocation",
+                "fileName": {
+                    "value": "@dataset().name",
+                    "type": "Expression"
+                },
+                "folderPath": {
+                    "value": "@dataset().date",
+                    "type": "Expression"
+                },
+                "container": "apirawdata"
+            }
+        },
+        "schema": {}
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
