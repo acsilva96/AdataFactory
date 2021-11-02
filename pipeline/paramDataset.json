@@ -28,7 +28,11 @@
 					},
 					"dataset": {
 						"referenceName": "Json2",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": "anyjson",
+							"filename": "anyjson"
+						}
 					},
 					"firstRowOnly": false
 				}
