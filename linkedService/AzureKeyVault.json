@@ -1,10 +1,11 @@
 {
-	"name": "AzureKeyVault",
-	"properties": {
-		"annotations": [],
-		"type": "AzureKeyVault",
-		"typeProperties": {
-			"baseUrl": "https://mypandorasecrets.vault.azure.net/"
-		}
-	}
+    "name": "AzureKeyVault",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "AzureKeyVault",
+        "typeProperties": {
+            "baseUrl": "https://idealista.vault.azure.net/"
+        }
+    }
 }
