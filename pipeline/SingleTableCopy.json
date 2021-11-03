@@ -1,0 +1,165 @@
+{
+    "name": "SingleTableCopy",
+    "properties": {
+        "activities": [
+            {
+                "name": "Copy Table",
+                "type": "Copy",
+                "dependsOn": [
+                    {
+                        "activity": "Path",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "SnowflakeSource",
+                        "exportSettings": {
+                            "type": "SnowflakeExportCopyCommand"
+                        }
+                    },
+                    "sink": {
+                        "type": "ParquetSink",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageWriteSettings",
+                            "blockSizeInMB": 4
+                        },
+                        "formatSettings": {
+                            "type": "ParquetWriteSettings"
+                        }
+                    },
+                    "enableStaging": false
+                },
+                "inputs": [
+                    {
+                        "referenceName": "SnowflakeCDWTable",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "table": {
+                                "value": "@variables('table')",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "ParquetFolder",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "container": "customer-insights",
+                            "directory": {
+                                "value": "@variables('path')",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Table To Load",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "table",
+                    "value": "BDM.PROPOSITION"
+                }
+            },
+            {
+                "name": "DeleteOlderFiles",
+                "type": "Delete",
+                "dependsOn": [
+                    {
+                        "activity": "Copy Table",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "dataset": {
+                        "referenceName": "ParquetFolder",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "container": {
+                                "value": "customer_insights",
+                                "type": "Expression"
+                            },
+                            "directory": {
+                                "value": "@variables('path')",
+                                "type": "Expression"
+                            }
+                        }
+                    },
+                    "enableLogging": false,
+                    "storeSettings": {
+                        "type": "AzureBlobStorageReadSettings",
+                        "recursive": true,
+                        "modifiedDatetimeStart": "2000-01-01T00:00:00Z",
+                        "modifiedDatetimeEnd": {
+                            "value": "@pipeline().TriggerTime",
+                            "type": "Expression"
+                        },
+                        "enablePartitionDiscovery": false
+                    }
+                }
+            },
+            {
+                "name": "Path",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "Table To Load",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "path",
+                    "value": {
+                        "value": "@concat('Raw/', variables('table'))",
+                        "type": "Expression"
+                    }
+                }
+            }
+        ],
+        "variables": {
+            "table": {
+                "type": "String"
+            },
+            "query": {
+                "type": "String"
+            },
+            "path": {
+                "type": "String"
+            }
+        },
+        "folder": {
+            "name": "CSINSIGHTS/CDW"
+        },
+        "annotations": [],
+        "lastPublishTime": "2021-10-25T14:43:55Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
