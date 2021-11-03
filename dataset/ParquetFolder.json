@@ -1,0 +1,39 @@
+{
+    "name": "ParquetFolder",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "SADataEnergyRun",
+            "type": "LinkedServiceReference"
+        },
+        "parameters": {
+            "container": {
+                "type": "string",
+                "defaultValue": "customer-insights"
+            },
+            "directory": {
+                "type": "string"
+            }
+        },
+        "folder": {
+            "name": "GENERAL"
+        },
+        "annotations": [],
+        "type": "Parquet",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobStorageLocation",
+                "folderPath": {
+                    "value": "@dataset().directory",
+                    "type": "Expression"
+                },
+                "container": {
+                    "value": "@dataset().container",
+                    "type": "Expression"
+                }
+            },
+            "compressionCodec": "snappy"
+        },
+        "schema": []
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
