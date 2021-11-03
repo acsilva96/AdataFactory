@@ -2,7 +2,7 @@
 	"name": "Parquet1",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureBlobStorageSAS_allow",
+			"referenceName": "AzureBlobStorage_SAS_DENY",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
