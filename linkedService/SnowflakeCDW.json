@@ -1,0 +1,19 @@
+{
+    "name": "SnowflakeCDW",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "Snowflake",
+        "typeProperties": {
+            "connectionString": "jdbc:snowflake://eonnordiccs.west-europe.azure.snowflakecomputing.com/?user=SF_DF_CS_ENERGY&db=CDW&warehouse=SF_DF_CS_ENERGY_WH&role=ANALYST_CS",
+            "password": {
+                "type": "AzureKeyVaultSecret",
+                "store": {
+                    "referenceName": "KVDataEnergyRun",
+                    "type": "LinkedServiceReference"
+                },
+                "secretName": "SNOWFLAKEDATAFACTORYPWDENERGY"
+            }
+        }
+    }
+}

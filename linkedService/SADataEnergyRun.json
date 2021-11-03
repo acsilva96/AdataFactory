@@ -1,0 +1,19 @@
+{
+    "name": "SADataEnergyRun",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "AzureBlobStorage",
+        "typeProperties": {
+            "sasUri": "https://sadataenergy.blob.core.windows.net/",
+            "sasToken": {
+                "type": "AzureKeyVaultSecret",
+                "store": {
+                    "referenceName": "KVDataEnergyRun",
+                    "type": "LinkedServiceReference"
+                },
+                "secretName": "SADATAENERGYSASKEY"
+            }
+        }
+    }
+}
