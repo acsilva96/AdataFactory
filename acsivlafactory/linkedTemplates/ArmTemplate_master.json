@@ -11,6 +11,18 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLS gen2'"
 		},
+		"AzureBlobStorage10_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage10'"
+		},
+		"AzureBlobStorage11_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage11'"
+		},
+		"AzureBlobStorage12_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage12'"
+		},
 		"AzureBlobStorage2_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage2'"
@@ -95,9 +107,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase104'"
 		},
+		"AzureSqlDatabase105_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase105'"
+		},
 		"AzureSqlDatabase2_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase2'"
+		},
+		"Blob_Idealista_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Blob_Idealista'"
 		},
 		"linkedService1_connectionString": {
 			"type": "secureString",
@@ -111,6 +131,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'linkedService2'"
 		},
+		"linkedServiceLOGSdelete_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedServiceLOGSdelete'"
+		},
+		"linkedService3_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'linkedService3'"
+		},
 		"ADLS gen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.dfs.core.windows.net"
@@ -118,6 +146,14 @@
 		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
 			"type": "string",
 			"defaultValue": "https://tutorialstorageacsilva.blob.core.windows.net"
+		},
+		"AzureBlobStorageSAS_allow_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'AzureBlobStorageSAS_allow'"
+		},
+		"AzureBlobStorage_SAS_DENY_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'AzureBlobStorage_SAS_DENY'"
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
@@ -145,11 +181,39 @@
 		},
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
+			"defaultValue": "https://idealista.vault.azure.net/"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
 			"defaultValue": "https://mypandorasecrets.vault.azure.net/"
 		},
 		"InputDataset_properties_typeProperties_sasUri_secretName": {
 			"type": "string",
 			"defaultValue": "SASblobSAS"
+		},
+		"KVDataEnergyRun_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KV-Data-Energy-RUN.vault.azure.net/"
+		},
+		"RESTAPIIdealista_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.idealista.com/3.5/"
+		},
+		"RestServiceIdealista_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.idealista.com/3.5/"
+		},
+		"SADataEnergyRun_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'SADataEnergyRun'"
+		},
+		"SADataEnergyRun_properties_typeProperties_sasToken_secretName": {
+			"type": "string",
+			"defaultValue": "SADATAENERGYSASKEY"
+		},
+		"SnowflakeCDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SnowflakeCDW'"
 		},
 		"linkedService1HDINSIGHT_properties_typeProperties_userName": {
 			"type": "string",
@@ -193,6 +257,15 @@
 					"ADLS gen2_accountKey": {
 						"value": "[parameters('ADLS gen2_accountKey')]"
 					},
+					"AzureBlobStorage10_connectionString": {
+						"value": "[parameters('AzureBlobStorage10_connectionString')]"
+					},
+					"AzureBlobStorage11_connectionString": {
+						"value": "[parameters('AzureBlobStorage11_connectionString')]"
+					},
+					"AzureBlobStorage12_connectionString": {
+						"value": "[parameters('AzureBlobStorage12_connectionString')]"
+					},
 					"AzureBlobStorage2_connectionString": {
 						"value": "[parameters('AzureBlobStorage2_connectionString')]"
 					},
@@ -226,26 +299,14 @@
 					"AzureBlobStorageSOURCEcsv_connectionString": {
 						"value": "[parameters('AzureBlobStorageSOURCEcsv_connectionString')]"
 					},
-					"AzureDataLakeStorage1_accountKey": {
-						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
-					},
-					"AzureDatabricks_LinkedService_accessToken": {
-						"value": "[parameters('AzureDatabricks_LinkedService_accessToken')]"
-					},
-					"AzureSqlDatabase1_connectionString": {
-						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
-					},
-					"AzureSqlDatabase101_connectionString": {
-						"value": "[parameters('AzureSqlDatabase101_connectionString')]"
-					},
 					"ADLS gen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLS gen2_properties_typeProperties_url')]"
 					},
-					"AzureDataLakeStorage1_properties_typeProperties_url": {
-						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					"AzureBlobStorageSAS_allow_sasUri": {
+						"value": "[parameters('AzureBlobStorageSAS_allow_sasUri')]"
 					},
-					"AzureKeyVault_properties_typeProperties_baseUrl": {
-						"value": "[parameters('AzureKeyVault_properties_typeProperties_baseUrl')]"
+					"AzureBlobStorage_SAS_DENY_sasUri": {
+						"value": "[parameters('AzureBlobStorage_SAS_DENY_sasUri')]"
 					}
 				}
 			},
@@ -265,6 +326,18 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					},
+					"AzureDatabricks_LinkedService_accessToken": {
+						"value": "[parameters('AzureDatabricks_LinkedService_accessToken')]"
+					},
+					"AzureSqlDatabase1_connectionString": {
+						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
+					},
+					"AzureSqlDatabase101_connectionString": {
+						"value": "[parameters('AzureSqlDatabase101_connectionString')]"
+					},
 					"AzureSqlDatabase102_connectionString": {
 						"value": "[parameters('AzureSqlDatabase102_connectionString')]"
 					},
@@ -274,14 +347,41 @@
 					"AzureSqlDatabase104_connectionString": {
 						"value": "[parameters('AzureSqlDatabase104_connectionString')]"
 					},
+					"AzureSqlDatabase105_connectionString": {
+						"value": "[parameters('AzureSqlDatabase105_connectionString')]"
+					},
 					"AzureSqlDatabase2_connectionString": {
 						"value": "[parameters('AzureSqlDatabase2_connectionString')]"
+					},
+					"Blob_Idealista_connectionString": {
+						"value": "[parameters('Blob_Idealista_connectionString')]"
 					},
 					"linkedService1_connectionString": {
 						"value": "[parameters('linkedService1_connectionString')]"
 					},
 					"linkedService2_connectionString": {
 						"value": "[parameters('linkedService2_connectionString')]"
+					},
+					"linkedServiceLOGSdelete_connectionString": {
+						"value": "[parameters('linkedServiceLOGSdelete_connectionString')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureKeyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault_properties_typeProperties_baseUrl')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+					},
+					"KVDataEnergyRun_properties_typeProperties_baseUrl": {
+						"value": "[parameters('KVDataEnergyRun_properties_typeProperties_baseUrl')]"
+					},
+					"RESTAPIIdealista_properties_typeProperties_url": {
+						"value": "[parameters('RESTAPIIdealista_properties_typeProperties_url')]"
+					},
+					"RestServiceIdealista_properties_typeProperties_url": {
+						"value": "[parameters('RestServiceIdealista_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -297,6 +397,29 @@
 				"mode": "incremental",
 				"templateLink": {
 					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"linkedService3_connectionString": {
+						"value": "[parameters('linkedService3_connectionString')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "acsivlafactory_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
@@ -336,11 +459,40 @@
 					"InputDataset_properties_typeProperties_sasUri_secretName": {
 						"value": "[parameters('InputDataset_properties_typeProperties_sasUri_secretName')]"
 					},
+					"SADataEnergyRun_sasUri": {
+						"value": "[parameters('SADataEnergyRun_sasUri')]"
+					},
+					"SADataEnergyRun_properties_typeProperties_sasToken_secretName": {
+						"value": "[parameters('SADataEnergyRun_properties_typeProperties_sasToken_secretName')]"
+					},
+					"SnowflakeCDW_connectionString": {
+						"value": "[parameters('SnowflakeCDW_connectionString')]"
+					},
 					"linkedService1HDINSIGHT_properties_typeProperties_userName": {
 						"value": "[parameters('linkedService1HDINSIGHT_properties_typeProperties_userName')]"
 					},
 					"Tumbling_properties_pipeline_parameters_GetTime": {
 						"value": "[parameters('Tumbling_properties_pipeline_parameters_GetTime')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "acsivlafactory_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"tumbling1min_properties_pipeline_parameters_GetTime": {
 						"value": "[parameters('tumbling1min_properties_pipeline_parameters_GetTime')]"
@@ -348,17 +500,17 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_1')]"
+				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_3')]"
 			]
 		},
 		{
-			"name": "acsivlafactory_ArmTemplate_3",
+			"name": "acsivlafactory_ArmTemplate_5",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2018-02-01",
 			"properties": {
 				"mode": "incremental",
 				"templateLink": {
-					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
@@ -368,7 +520,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_2')]"
+				"[resourceId('Microsoft.Resources/deployments', 'acsivlafactory_ArmTemplate_4')]"
 			]
 		}
 	]

@@ -1,0 +1,2109 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "acsivlafactory"
+		},
+		"tumbling1min_properties_pipeline_parameters_GetTime": {
+			"type": "string",
+			"defaultValue": "@utcnow()"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/tumbling1min')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "Triggers",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"GetTime": "[parameters('tumbling1min_properties_pipeline_parameters_GetTime')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Minute",
+					"interval": 5,
+					"startTime": "2021-10-26T10:21:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyFilesfromMultipleContainers')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Scan the file path on your source storage store and get the container list.",
+				"activities": [
+					{
+						"name": "EnumerateContainersList",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "BinarySourceFileStore",
+								"type": "DatasetReference",
+								"parameters": {
+									"container": {
+										"value": "@pipeline().parameters.SourceFileFolder",
+										"type": "Expression"
+									},
+									"directory": {
+										"value": "@pipeline().parameters.SourceFileDirectory",
+										"type": "Expression"
+									}
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEachContainer",
+						"description": "Get the container list from Metadata activity and then iterates each of them to Copy activity.",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "EnumerateContainersList",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('EnumerateContainersList').output.childItems",
+								"type": "Expression"
+							},
+							"batchCount": 4,
+							"activities": [
+								{
+									"name": "CopyOneContainer",
+									"description": "Copy each container from source storage store to destination store.",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true
+											},
+											"formatSettings": {
+												"type": "BinaryReadSettings"
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings",
+												"copyBehavior": "PreserveHierarchy"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "BinarySourceFileStore",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": {
+													"value": "@pipeline().parameters.SourceFileFolder",
+													"type": "Expression"
+												},
+												"directory": {
+													"value": "@concat(pipeline().parameters.SourceFileDirectory,'/',item().name)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "BinarySinkFileStore",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": {
+													"value": "@pipeline().parameters.DestinationFileFolder",
+													"type": "Expression"
+												},
+												"directory": {
+													"value": "@concat(pipeline().parameters.DestinationFileDirectory,'/',item().name)",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"SourceFileFolder": {
+						"type": "string",
+						"defaultValue": "/"
+					},
+					"SourceFileDirectory": {
+						"type": "string",
+						"defaultValue": "/"
+					},
+					"DestinationFileFolder": {
+						"type": "string",
+						"defaultValue": "/"
+					},
+					"DestinationFileDirectory": {
+						"type": "string",
+						"defaultValue": "/"
+					}
+				},
+				"folder": {
+					"name": "Training"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Idealista')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Token",
+						"description": "Get bearer token from Idealista",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:05:00",
+							"retry": 1,
+							"retryIntervalInSeconds": 60,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://api.idealista.com/oauth/token",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+							},
+							"body": "grant_type=client_credentials&scope=read",
+							"disableCertValidation": false,
+							"authentication": {
+								"type": "Basic",
+								"username": "2v911ue369f0ezc5o6giz4jvn4hdcn64",
+								"password": {
+									"type": "AzureKeyVaultSecret",
+									"store": {
+										"referenceName": "AzureKeyVault1",
+										"type": "LinkedServiceReference"
+									},
+									"secretName": "idealistaSECRET"
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy REST Data to Blob",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get Token",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "POST",
+								"requestBody": "{}",
+								"additionalHeaders": {
+									"Content-Type": "Content-Type: multipart/form-data;",
+									"Authorization": {
+										"value": "@concat('Bearer',activity('Get Token').output.access_token)",
+										"type": "Expression"
+									}
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings",
+									"copyBehavior": "FlattenHierarchy"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings",
+									"filePattern": "setOfObjects"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['propertyCode']"
+										},
+										"sink": {
+											"path": "$['elementList']['propertyCode']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['thumbnail']"
+										},
+										"sink": {
+											"path": "$['elementList']['thumbnail']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['externalReference']"
+										},
+										"sink": {
+											"path": "$['elementList']['externalReference']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['numPhotos']"
+										},
+										"sink": {
+											"path": "$['elementList']['numPhotos']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['price']"
+										},
+										"sink": {
+											"path": "$['elementList']['price']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['propertyType']"
+										},
+										"sink": {
+											"path": "$['elementList']['propertyType']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['operation']"
+										},
+										"sink": {
+											"path": "$['elementList']['operation']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['size']"
+										},
+										"sink": {
+											"path": "$['elementList']['size']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['exterior']"
+										},
+										"sink": {
+											"path": "$['elementList']['exterior']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['rooms']"
+										},
+										"sink": {
+											"path": "$['elementList']['rooms']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['bathrooms']"
+										},
+										"sink": {
+											"path": "$['elementList']['bathrooms']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['address']"
+										},
+										"sink": {
+											"path": "$['elementList']['address']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['province']"
+										},
+										"sink": {
+											"path": "$['elementList']['province']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['municipality']"
+										},
+										"sink": {
+											"path": "$['elementList']['municipality']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['country']"
+										},
+										"sink": {
+											"path": "$['elementList']['country']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['latitude']"
+										},
+										"sink": {
+											"path": "$['elementList']['latitude']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['longitude']"
+										},
+										"sink": {
+											"path": "$['elementList']['longitude']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['showAddress']"
+										},
+										"sink": {
+											"path": "$['elementList']['showAddress']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['url']"
+										},
+										"sink": {
+											"path": "$['elementList']['url']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['distance']"
+										},
+										"sink": {
+											"path": "$['elementList']['distance']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['hasVideo']"
+										},
+										"sink": {
+											"path": "$['elementList']['hasVideo']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"path": "$['elementList']['status']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['newDevelopment']"
+										},
+										"sink": {
+											"path": "$['elementList']['newDevelopment']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['priceByArea']"
+										},
+										"sink": {
+											"path": "$['elementList']['priceByArea']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['detailedType']['typology']"
+										},
+										"sink": {
+											"path": "$['elementList']['detailedType']['typology']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['detailedType']['subTypology']"
+										},
+										"sink": {
+											"path": "$['elementList']['detailedType']['subTypology']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['suggestedTexts']['subtitle']"
+										},
+										"sink": {
+											"path": "$['elementList']['suggestedTexts']['subtitle']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['suggestedTexts']['title']"
+										},
+										"sink": {
+											"path": "$['elementList']['suggestedTexts']['title']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['hasPlan']"
+										},
+										"sink": {
+											"path": "$['elementList']['hasPlan']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['has3DTour']"
+										},
+										"sink": {
+											"path": "$['elementList']['has3DTour']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['has360']"
+										},
+										"sink": {
+											"path": "$['elementList']['has360']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['hasStaging']"
+										},
+										"sink": {
+											"path": "$['elementList']['hasStaging']"
+										}
+									},
+									{
+										"source": {
+											"path": "[['topNewDevelopment']"
+										},
+										"sink": {
+											"path": "$['elementList']['topNewDevelopment']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['total']"
+										},
+										"sink": {
+											"path": "$['total']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['totalPages']"
+										},
+										"sink": {
+											"path": "$['totalPages']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['actualPage']"
+										},
+										"sink": {
+											"path": "$['actualPage']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['itemsPerPage']"
+										},
+										"sink": {
+											"path": "$['itemsPerPage']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['numPaginations']"
+										},
+										"sink": {
+											"path": "$['numPaginations']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['hiddenResults']"
+										},
+										"sink": {
+											"path": "$['hiddenResults']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['summary']"
+										},
+										"sink": {
+											"path": "$['summary']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['lowerRangePosition']"
+										},
+										"sink": {
+											"path": "$['lowerRangePosition']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['upperRangePosition']"
+										},
+										"sink": {
+											"path": "$['upperRangePosition']"
+										}
+									},
+									{
+										"source": {
+											"path": "$['paginable']"
+										},
+										"sink": {
+											"path": "$['paginable']"
+										}
+									}
+								],
+								"collectionReference": "$['elementList']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestAPIIdealista",
+								"type": "DatasetReference",
+								"parameters": {
+									"country": "pt",
+									"locale": "pt",
+									"language": "pt",
+									"max_items": "3",
+									"operation": "sale",
+									"property_type": "homes",
+									"order": "priceDown",
+									"center": "38.7252,-9.1498",
+									"distance": "60000",
+									"sort": "desc",
+									"bankOffer": "false"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ResultIdealista",
+								"type": "DatasetReference",
+								"parameters": {
+									"date": {
+										"value": "@substring(string(utcnow()),0,10)",
+										"type": "Expression"
+									},
+									"name": {
+										"value": "@concat(pipeline().RunId,'_',utcnow())",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"country": {
+						"type": "String",
+						"defaultValue": "pt"
+					},
+					"locale": {
+						"type": "String",
+						"defaultValue": "pt"
+					},
+					"language": {
+						"type": "String",
+						"defaultValue": "pt"
+					},
+					"max_items": {
+						"type": "String",
+						"defaultValue": "1"
+					},
+					"operation": {
+						"type": "String",
+						"defaultValue": "sale"
+					},
+					"property_type": {
+						"type": "String",
+						"defaultValue": "homes"
+					},
+					"order": {
+						"type": "String",
+						"defaultValue": "priceDown"
+					},
+					"center": {
+						"type": "String",
+						"defaultValue": "38.7252,-9.1498"
+					},
+					"distance": {
+						"type": "String",
+						"defaultValue": "60000"
+					},
+					"sort": {
+						"type": "String",
+						"defaultValue": "desc"
+					},
+					"bankOffer": {
+						"type": "String",
+						"defaultValue": "false"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-08-24T17:42:34Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Metadata')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "BinaryConnectionFile",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"itemName",
+								"lastModified",
+								"size"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "test",
+							"value": {
+								"value": "@activity('Get Metadata1').output.lastModified",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"test": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Training"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLtoBLOB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink"
+							},
+							"enableStaging": false,
+							"parallelCopies": 1,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "SalesOrderID",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "SalesOrderID",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "SalesOrderDetailID",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "SalesOrderDetail",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "OrderQty",
+											"type": "Int16",
+											"physicalType": "smallint"
+										},
+										"sink": {
+											"name": "OrderQty",
+											"type": "Int16",
+											"physicalType": "smallint"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductID",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "ProductID",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitPrice",
+											"type": "Decimal",
+											"physicalType": "money",
+											"scale": 4,
+											"precision": 19
+										},
+										"sink": {
+											"name": "UnitPrice",
+											"type": "Decimal",
+											"physicalType": "money",
+											"scale": 4,
+											"precision": 19
+										}
+									},
+									{
+										"source": {
+											"name": "rowguid",
+											"type": "Guid",
+											"physicalType": "uniqueidentifier"
+										},
+										"sink": {
+											"name": "rowguid",
+											"type": "Guid",
+											"physicalType": "uniqueidentifier"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable102",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTable103",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Training"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLtoFILE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable101",
+								"type": "DatasetReference",
+								"parameters": {
+									"DBName": {
+										"value": "@pipeline().parameters.DBName",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DelimitedTextSQLtoFILE101",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileName": {
+										"value": "@concat(pipeline().parameters.DBName,'.txt')",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"DBName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "Training"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Spark')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Spark1",
+						"type": "HDInsightSpark",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"rootPath": "adftutorial/spark",
+							"entryFilePath": "WordCount_Spark.py",
+							"sparkJobLinkedService": {
+								"referenceName": "AzureBlobStorageMINECRAFT",
+								"type": "LinkedServiceReference"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "linkedService1HDINSIGHT",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Training"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Zipping')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.csv",
+									"deleteFilesAfterCompletion": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "BinaryCSVsource",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "BinaryCSVsink",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileName": {
+										"value": "@{pipeline().TriggerTime}.zip",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Training"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/paramDataset')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "Json2",
+								"type": "DatasetReference",
+								"parameters": {
+									"directory": "anyjson",
+									"filename": "anyjson"
+								}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CASES"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Token",
+						"description": "Get bearer token from Idealista",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:05:00",
+							"retry": 1,
+							"retryIntervalInSeconds": 60,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://api.idealista.com/oauth/token",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+							},
+							"body": "grant_type=client_credentials&scope=read",
+							"disableCertValidation": false,
+							"authentication": {
+								"type": "Basic",
+								"username": "2v911ue369f0ezc5o6giz4jvn4hdcn64",
+								"password": {
+									"type": "AzureKeyVaultSecret",
+									"store": {
+										"referenceName": "AzureKeyVault",
+										"type": "LinkedServiceReference"
+									},
+									"secretName": "idealistaSECRET"
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy REST Data to Blob",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get Token",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "POST",
+								"requestBody": "{}",
+								"additionalHeaders": {
+									"Content-Type": "Content-Type: multipart/form-data;",
+									"Authorization": {
+										"value": "@concat('Bearer',activity('Get Token').output.access_token)",
+										"type": "Expression"
+									}
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "[['propertyCode']"
+										},
+										"sink": {
+											"ordinal": 1
+										}
+									},
+									{
+										"source": {
+											"path": "[['thumbnail']"
+										},
+										"sink": {
+											"ordinal": 2
+										}
+									},
+									{
+										"source": {
+											"path": "[['externalReference']"
+										},
+										"sink": {
+											"ordinal": 3
+										}
+									},
+									{
+										"source": {
+											"path": "[['numPhotos']"
+										},
+										"sink": {
+											"ordinal": 4
+										}
+									},
+									{
+										"source": {
+											"path": "[['price']"
+										},
+										"sink": {
+											"ordinal": 5
+										}
+									},
+									{
+										"source": {
+											"path": "[['propertyType']"
+										},
+										"sink": {
+											"ordinal": 6
+										}
+									},
+									{
+										"source": {
+											"path": "[['operation']"
+										},
+										"sink": {
+											"ordinal": 7
+										}
+									},
+									{
+										"source": {
+											"path": "[['size']"
+										},
+										"sink": {
+											"ordinal": 8
+										}
+									},
+									{
+										"source": {
+											"path": "[['exterior']"
+										},
+										"sink": {
+											"ordinal": 9
+										}
+									},
+									{
+										"source": {
+											"path": "[['rooms']"
+										},
+										"sink": {
+											"ordinal": 10
+										}
+									},
+									{
+										"source": {
+											"path": "[['bathrooms']"
+										},
+										"sink": {
+											"ordinal": 11
+										}
+									},
+									{
+										"source": {
+											"path": "[['address']"
+										},
+										"sink": {
+											"ordinal": 12
+										}
+									},
+									{
+										"source": {
+											"path": "[['province']"
+										},
+										"sink": {
+											"ordinal": 13
+										}
+									},
+									{
+										"source": {
+											"path": "[['municipality']"
+										},
+										"sink": {
+											"ordinal": 14
+										}
+									},
+									{
+										"source": {
+											"path": "[['country']"
+										},
+										"sink": {
+											"ordinal": 15
+										}
+									},
+									{
+										"source": {
+											"path": "[['latitude']"
+										},
+										"sink": {
+											"ordinal": 16
+										}
+									},
+									{
+										"source": {
+											"path": "[['longitude']"
+										},
+										"sink": {
+											"ordinal": 17
+										}
+									},
+									{
+										"source": {
+											"path": "[['showAddress']"
+										},
+										"sink": {
+											"ordinal": 18
+										}
+									},
+									{
+										"source": {
+											"path": "[['url']"
+										},
+										"sink": {
+											"ordinal": 19
+										}
+									},
+									{
+										"source": {
+											"path": "[['distance']"
+										},
+										"sink": {
+											"ordinal": 20
+										}
+									},
+									{
+										"source": {
+											"path": "[['hasVideo']"
+										},
+										"sink": {
+											"ordinal": 21
+										}
+									},
+									{
+										"source": {
+											"path": "[['status']"
+										},
+										"sink": {
+											"ordinal": 22
+										}
+									},
+									{
+										"source": {
+											"path": "[['newDevelopment']"
+										},
+										"sink": {
+											"ordinal": 23
+										}
+									},
+									{
+										"source": {
+											"path": "[['priceByArea']"
+										},
+										"sink": {
+											"ordinal": 24
+										}
+									},
+									{
+										"source": {
+											"path": "[['detailedType']['typology']"
+										},
+										"sink": {
+											"ordinal": 25
+										}
+									},
+									{
+										"source": {
+											"path": "[['detailedType']['subTypology']"
+										},
+										"sink": {
+											"ordinal": 26
+										}
+									},
+									{
+										"source": {
+											"path": "[['suggestedTexts']['subtitle']"
+										},
+										"sink": {
+											"ordinal": 27
+										}
+									},
+									{
+										"source": {
+											"path": "[['suggestedTexts']['title']"
+										},
+										"sink": {
+											"ordinal": 28
+										}
+									},
+									{
+										"source": {
+											"path": "[['hasPlan']"
+										},
+										"sink": {
+											"ordinal": 29
+										}
+									},
+									{
+										"source": {
+											"path": "[['has3DTour']"
+										},
+										"sink": {
+											"ordinal": 30
+										}
+									},
+									{
+										"source": {
+											"path": "[['has360']"
+										},
+										"sink": {
+											"ordinal": 31
+										}
+									},
+									{
+										"source": {
+											"path": "[['hasStaging']"
+										},
+										"sink": {
+											"ordinal": 32
+										}
+									},
+									{
+										"source": {
+											"path": "[['topNewDevelopment']"
+										},
+										"sink": {
+											"ordinal": 33
+										}
+									},
+									{
+										"source": {
+											"path": "$['total']"
+										},
+										"sink": {
+											"ordinal": 34
+										}
+									},
+									{
+										"source": {
+											"path": "$['totalPages']"
+										},
+										"sink": {
+											"ordinal": 35
+										}
+									},
+									{
+										"source": {
+											"path": "$['actualPage']"
+										},
+										"sink": {
+											"ordinal": 36
+										}
+									},
+									{
+										"source": {
+											"path": "$['itemsPerPage']"
+										},
+										"sink": {
+											"ordinal": 37
+										}
+									},
+									{
+										"source": {
+											"path": "$['numPaginations']"
+										},
+										"sink": {
+											"ordinal": 38
+										}
+									},
+									{
+										"source": {
+											"path": "$['hiddenResults']"
+										},
+										"sink": {
+											"ordinal": 39
+										}
+									},
+									{
+										"source": {
+											"path": "$['summary']"
+										},
+										"sink": {
+											"ordinal": 40
+										}
+									},
+									{
+										"source": {
+											"path": "$['lowerRangePosition']"
+										},
+										"sink": {
+											"ordinal": 41
+										}
+									},
+									{
+										"source": {
+											"path": "$['upperRangePosition']"
+										},
+										"sink": {
+											"ordinal": 42
+										}
+									},
+									{
+										"source": {
+											"path": "$['paginable']"
+										},
+										"sink": {
+											"ordinal": 43
+										}
+									}
+								],
+								"collectionReference": "$['elementList']"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "RestIdealista",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DelimitedText3",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"country": {
+						"type": "String",
+						"defaultValue": "pt"
+					},
+					"locale": {
+						"type": "String",
+						"defaultValue": "pt"
+					},
+					"language": {
+						"type": "String",
+						"defaultValue": "pt"
+					},
+					"max_items": {
+						"type": "String",
+						"defaultValue": "1"
+					},
+					"operation": {
+						"type": "String",
+						"defaultValue": "sale"
+					},
+					"property_type": {
+						"type": "String",
+						"defaultValue": "homes"
+					},
+					"order": {
+						"type": "String",
+						"defaultValue": "priceDown"
+					},
+					"center": {
+						"type": "String",
+						"defaultValue": "38.7252,-9.1498"
+					},
+					"distance": {
+						"type": "String",
+						"defaultValue": "60000"
+					},
+					"sort": {
+						"type": "String",
+						"defaultValue": "desc"
+					},
+					"bankOffer": {
+						"type": "String",
+						"defaultValue": "false"
+					}
+				},
+				"folder": {
+					"name": "Idealista"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-08-24T17:42:34Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/storage_SAS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable105",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Delete1",
+						"type": "Delete",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "Parquet1",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"logStorageSettings": {
+								"linkedServiceName": {
+									"referenceName": "linkedServiceLOGSdelete",
+									"type": "LinkedServiceReference"
+								}
+							},
+							"enableLogging": true,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"modifiedDatetimeStart": "2021-11-01T00:00:00.000Z",
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 3
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CASES"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/InputDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "InputDataset",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emp.txt",
+						"container": "adftutorial"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OutputDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "InputDataset",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "output",
+						"container": "adftutorial"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SinkBlobDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@CONCAT(pipeline().RunId, '.txt')",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@pipeline().parameters.sinkBlobContainer",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceBlobDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emp.txt",
+						"container": {
+							"value": "@pipeline().parameters.sourceBlobContainer",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_384')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "InputDataset",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "inputEmp.txt",
+						"container": "adftutorial"
+					},
+					"columnDelimiter": "|",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "FirstName",
+						"type": "String"
+					},
+					{
+						"name": "LastName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/empTXT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "InputDataset",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emp.txt",
+						"container": "adftutorial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "goodMovies",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText4",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow2')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "goodMovies",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText5",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/powerquery2')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "WranglingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"name": "AzureSqlTable102",
+							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> AzureSqlTable102",
+							"dataset": {
+								"referenceName": "AzureSqlTable102",
+								"type": "DatasetReference"
+							}
+						}
+					],
+					"script": "section Section1;\r\nshared AzureSqlTable102 = let\r\n  AdfDoc = Sql.Database(\"mysqlserveracsilva.database.windows.net\", \"myacsilvadb\", [CreateNavigationProperties = false]),\r\n  InputTable = AdfDoc{[Schema = \"SalesLT\", Item = \"SalesOrderDetail\"]}[Data]\r\nin\r\n  InputTable;\r\nshared UserQuery = let\r\n  Source = AzureSqlTable102,\r\n  #\"Reordered columns\" = Table.ReorderColumns(Source, {\"SalesOrderID\", \"OrderQty\", \"ProductID\", \"UnitPrice\", \"SalesOrderDetailID\", \"UnitPriceDiscount\", \"LineTotal\", \"rowguid\", \"ModifiedDate\"}),\r\n  #\"Removed columns\" = Table.RemoveColumns(#\"Reordered columns\", {\"SalesOrderDetailID\"}),\r\n  #\"Added custom\" = Table.AddColumn(#\"Removed columns\", \"DAY\", each Date.Day([ModifiedDate]))\r\nin\r\n  #\"Added custom\";\r\n",
+					"documentLocale": "en-us"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
