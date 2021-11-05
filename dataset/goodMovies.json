@@ -2,16 +2,16 @@
 	"name": "goodMovies",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ADLS gen2",
+			"referenceName": "linkedService3",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"folderPath": "output",
-				"fileSystem": "sample-data"
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Assets.csv",
+				"container": "input"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
