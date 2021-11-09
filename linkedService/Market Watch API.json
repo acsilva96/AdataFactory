@@ -1,0 +1,13 @@
+{
+	"name": "Market Watch API",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://marketwatch-api.hqrevenue.com/api/v1/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
+}
