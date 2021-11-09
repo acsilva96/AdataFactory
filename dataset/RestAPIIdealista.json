@@ -49,9 +49,6 @@
 			"bankOffer": {
 				"type": "string",
 				"defaultValue": "false"
-			},
-			"dfapitoken": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
