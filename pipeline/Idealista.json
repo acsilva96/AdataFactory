@@ -44,7 +44,7 @@
 					{
 						"activity": "Get Token",
 						"dependencyConditions": [
-							"Succeeded"
+							"Failed"
 						]
 					}
 				],
@@ -469,6 +469,56 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Get Token",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow3",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"source1": {
+								"country": "pt",
+								"locale": "pt",
+								"language": "pt",
+								"max_items": "1",
+								"operation": "sale",
+								"property_type": "homes",
+								"order": "priceDown",
+								"center": "38.7252,-9.1498",
+								"distance": "60000",
+								"sort": "desc",
+								"bankOffer": "false"
+							},
+							"sink1": {
+								"date": "@substring(string(utcnow()),0,10)",
+								"name": "@concat(pipeline().RunId,'_',utcnow())"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"variables": {
