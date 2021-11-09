@@ -1,0 +1,12 @@
+{
+	"name": "RestService133",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://marketwatch-api.hqrevenue.com/api/v1/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
