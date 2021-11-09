@@ -1,0 +1,12 @@
+{
+	"name": "RestServiceDUMMYapi",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://hub.dummyapis.com/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
