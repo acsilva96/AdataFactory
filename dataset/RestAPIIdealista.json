@@ -1,65 +1,68 @@
 {
-    "name": "RestAPIIdealista",
-    "properties": {
-        "linkedServiceName": {
-            "referenceName": "RESTAPIIdealista",
-            "type": "LinkedServiceReference"
-        },
-        "parameters": {
-            "country": {
-                "type": "string",
-                "defaultValue": "pt"
-            },
-            "locale": {
-                "type": "string",
-                "defaultValue": "pt"
-            },
-            "language": {
-                "type": "string",
-                "defaultValue": "pt"
-            },
-            "max_items": {
-                "type": "string",
-                "defaultValue": "1"
-            },
-            "operation": {
-                "type": "string",
-                "defaultValue": "sale"
-            },
-            "property_type": {
-                "type": "string",
-                "defaultValue": "homes"
-            },
-            "order": {
-                "type": "string",
-                "defaultValue": "priceDown"
-            },
-            "center": {
-                "type": "string",
-                "defaultValue": "38.7252,-9.1498"
-            },
-            "distance": {
-                "type": "string",
-                "defaultValue": "60000"
-            },
-            "sort": {
-                "type": "string",
-                "defaultValue": "desc"
-            },
-            "bankOffer": {
-                "type": "string",
-                "defaultValue": "false"
-            }
-        },
-        "annotations": [],
-        "type": "RestResource",
-        "typeProperties": {
-            "relativeUrl": {
-                "value": "@concat(dataset().country,\n'/search?operation=',dataset().operation,\n'&locale=',dataset().locale,\n'&maxItems=',dataset().max_items,\n'&order=',dataset().order,\n'&center=',dataset().center,\n'&distance=',dataset().distance,\n'&propertyType=',dataset().property_type,\n'&sort=',dataset().sort,\n'&language=',dataset().language)",
-                "type": "Expression"
-            }
-        },
-        "schema": []
-    },
-    "type": "Microsoft.DataFactory/factories/datasets"
+	"name": "RestAPIIdealista",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RESTAPIIdealista",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "pt"
+			},
+			"locale": {
+				"type": "string",
+				"defaultValue": "pt"
+			},
+			"language": {
+				"type": "string",
+				"defaultValue": "pt"
+			},
+			"max_items": {
+				"type": "string",
+				"defaultValue": "1"
+			},
+			"operation": {
+				"type": "string",
+				"defaultValue": "sale"
+			},
+			"property_type": {
+				"type": "string",
+				"defaultValue": "homes"
+			},
+			"order": {
+				"type": "string",
+				"defaultValue": "priceDown"
+			},
+			"center": {
+				"type": "string",
+				"defaultValue": "38.7252,-9.1498"
+			},
+			"distance": {
+				"type": "string",
+				"defaultValue": "60000"
+			},
+			"sort": {
+				"type": "string",
+				"defaultValue": "desc"
+			},
+			"bankOffer": {
+				"type": "string",
+				"defaultValue": "false"
+			},
+			"dfapitoken": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@concat(dataset().country,\n'/search?operation=',dataset().operation,\n'&locale=',dataset().locale,\n'&maxItems=',dataset().max_items,\n'&order=',dataset().order,\n'&center=',dataset().center,\n'&distance=',dataset().distance,\n'&propertyType=',dataset().property_type,\n'&sort=',dataset().sort,\n'&language=',dataset().language)",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
