@@ -1,0 +1,16 @@
+{
+	"name": "sqlDB_snowflake_repro",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sql_snowflake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "moviesSnowflake"
+		}
+	}
+}
