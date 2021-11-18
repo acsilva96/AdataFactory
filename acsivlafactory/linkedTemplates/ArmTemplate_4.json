@@ -7,6 +7,30 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "acsivlafactory"
 		},
+		"linkedService1HDINSIGHT_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'linkedService1HDINSIGHT'"
+		},
+		"SADataEnergyRun_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'SADataEnergyRun'"
+		},
+		"SADataEnergyRun_properties_typeProperties_sasToken_secretName": {
+			"type": "string",
+			"defaultValue": "SADATAENERGYSASKEY"
+		},
+		"SnowflakeCDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SnowflakeCDW'"
+		},
+		"linkedService1HDINSIGHT_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "clustername"
+		},
+		"Tumbling_properties_pipeline_parameters_GetTime": {
+			"type": "string",
+			"defaultValue": "@utcnow()"
+		},
 		"tumbling1min_properties_pipeline_parameters_GetTime": {
 			"type": "string",
 			"defaultValue": "@utcnow()"
@@ -16,6 +40,161 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/SADataEnergyRun')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('SADataEnergyRun_sasUri')]",
+					"sasToken": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "KVDataEnergyRun",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('SADataEnergyRun_properties_typeProperties_sasToken_secretName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SnowflakeCDW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Snowflake",
+				"typeProperties": {
+					"connectionString": "[parameters('SnowflakeCDW_connectionString')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "KVDataEnergyRun",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SNOWFLAKEDATAFACTORYPWDENERGY"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/linkedService1HDINSIGHT')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsight",
+				"typeProperties": {
+					"clusterUri": "https://u0e4b3b08-8628-4039-ab51-3db5bb00b0d9.azurehdinsight.net",
+					"userName": "[parameters('linkedService1HDINSIGHT_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('linkedService1HDINSIGHT_password')]"
+					},
+					"isEspEnabled": false,
+					"linkedServiceName": {
+						"referenceName": "AzureBlobStorage7",
+						"type": "LinkedServiceReference"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/15min_cycle')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PatientPipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 15,
+						"startTime": "2021-10-14T17:08:00Z",
+						"endTime": "2021-10-15T02:42:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/15min_tumbling')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "PatientPipeline",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Minute",
+					"interval": 15,
+					"startTime": "2021-10-14T17:10:00Z",
+					"endTime": "2021-10-15T03:42:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Tumbling')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "Triggers",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"GetTime": "[parameters('Tumbling_properties_pipeline_parameters_GetTime')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Minute",
+					"interval": 15,
+					"startTime": "2021-10-26T09:50:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/tumbling1min')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
@@ -209,536 +388,6 @@
 					"name": "Training"
 				},
 				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Idealista')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Get Token",
-						"description": "Get bearer token from Idealista",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.00:05:00",
-							"retry": 1,
-							"retryIntervalInSeconds": 60,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://api.idealista.com/oauth/token",
-							"method": "POST",
-							"headers": {
-								"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-							},
-							"body": "grant_type=client_credentials&scope=read",
-							"disableCertValidation": false,
-							"authentication": {
-								"type": "Basic",
-								"username": "2v911ue369f0ezc5o6giz4jvn4hdcn64",
-								"password": {
-									"type": "AzureKeyVaultSecret",
-									"store": {
-										"referenceName": "AzureKeyVault1",
-										"type": "LinkedServiceReference"
-									},
-									"secretName": "idealistaSECRET"
-								}
-							}
-						}
-					},
-					{
-						"name": "Copy REST Data to Blob",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Get Token",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "POST",
-								"requestBody": "{}",
-								"additionalHeaders": {
-									"Content-Type": "Content-Type: multipart/form-data;",
-									"Authorization": {
-										"value": "@concat('Bearer',activity('Get Token').output.access_token)",
-										"type": "Expression"
-									}
-								}
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings",
-									"copyBehavior": "FlattenHierarchy"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings",
-									"filePattern": "setOfObjects"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"path": "[['propertyCode']"
-										},
-										"sink": {
-											"path": "$['elementList']['propertyCode']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['thumbnail']"
-										},
-										"sink": {
-											"path": "$['elementList']['thumbnail']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['externalReference']"
-										},
-										"sink": {
-											"path": "$['elementList']['externalReference']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['numPhotos']"
-										},
-										"sink": {
-											"path": "$['elementList']['numPhotos']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['price']"
-										},
-										"sink": {
-											"path": "$['elementList']['price']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['propertyType']"
-										},
-										"sink": {
-											"path": "$['elementList']['propertyType']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['operation']"
-										},
-										"sink": {
-											"path": "$['elementList']['operation']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['size']"
-										},
-										"sink": {
-											"path": "$['elementList']['size']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['exterior']"
-										},
-										"sink": {
-											"path": "$['elementList']['exterior']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['rooms']"
-										},
-										"sink": {
-											"path": "$['elementList']['rooms']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['bathrooms']"
-										},
-										"sink": {
-											"path": "$['elementList']['bathrooms']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['address']"
-										},
-										"sink": {
-											"path": "$['elementList']['address']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['province']"
-										},
-										"sink": {
-											"path": "$['elementList']['province']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['municipality']"
-										},
-										"sink": {
-											"path": "$['elementList']['municipality']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['country']"
-										},
-										"sink": {
-											"path": "$['elementList']['country']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['latitude']"
-										},
-										"sink": {
-											"path": "$['elementList']['latitude']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['longitude']"
-										},
-										"sink": {
-											"path": "$['elementList']['longitude']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['showAddress']"
-										},
-										"sink": {
-											"path": "$['elementList']['showAddress']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['url']"
-										},
-										"sink": {
-											"path": "$['elementList']['url']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['distance']"
-										},
-										"sink": {
-											"path": "$['elementList']['distance']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['hasVideo']"
-										},
-										"sink": {
-											"path": "$['elementList']['hasVideo']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['status']"
-										},
-										"sink": {
-											"path": "$['elementList']['status']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['newDevelopment']"
-										},
-										"sink": {
-											"path": "$['elementList']['newDevelopment']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['priceByArea']"
-										},
-										"sink": {
-											"path": "$['elementList']['priceByArea']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['detailedType']['typology']"
-										},
-										"sink": {
-											"path": "$['elementList']['detailedType']['typology']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['detailedType']['subTypology']"
-										},
-										"sink": {
-											"path": "$['elementList']['detailedType']['subTypology']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['suggestedTexts']['subtitle']"
-										},
-										"sink": {
-											"path": "$['elementList']['suggestedTexts']['subtitle']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['suggestedTexts']['title']"
-										},
-										"sink": {
-											"path": "$['elementList']['suggestedTexts']['title']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['hasPlan']"
-										},
-										"sink": {
-											"path": "$['elementList']['hasPlan']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['has3DTour']"
-										},
-										"sink": {
-											"path": "$['elementList']['has3DTour']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['has360']"
-										},
-										"sink": {
-											"path": "$['elementList']['has360']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['hasStaging']"
-										},
-										"sink": {
-											"path": "$['elementList']['hasStaging']"
-										}
-									},
-									{
-										"source": {
-											"path": "[['topNewDevelopment']"
-										},
-										"sink": {
-											"path": "$['elementList']['topNewDevelopment']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['total']"
-										},
-										"sink": {
-											"path": "$['total']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['totalPages']"
-										},
-										"sink": {
-											"path": "$['totalPages']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['actualPage']"
-										},
-										"sink": {
-											"path": "$['actualPage']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['itemsPerPage']"
-										},
-										"sink": {
-											"path": "$['itemsPerPage']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['numPaginations']"
-										},
-										"sink": {
-											"path": "$['numPaginations']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['hiddenResults']"
-										},
-										"sink": {
-											"path": "$['hiddenResults']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['summary']"
-										},
-										"sink": {
-											"path": "$['summary']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['lowerRangePosition']"
-										},
-										"sink": {
-											"path": "$['lowerRangePosition']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['upperRangePosition']"
-										},
-										"sink": {
-											"path": "$['upperRangePosition']"
-										}
-									},
-									{
-										"source": {
-											"path": "$['paginable']"
-										},
-										"sink": {
-											"path": "$['paginable']"
-										}
-									}
-								],
-								"collectionReference": "$['elementList']"
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "RestAPIIdealista",
-								"type": "DatasetReference",
-								"parameters": {
-									"country": "pt",
-									"locale": "pt",
-									"language": "pt",
-									"max_items": "3",
-									"operation": "sale",
-									"property_type": "homes",
-									"order": "priceDown",
-									"center": "38.7252,-9.1498",
-									"distance": "60000",
-									"sort": "desc",
-									"bankOffer": "false"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ResultIdealista",
-								"type": "DatasetReference",
-								"parameters": {
-									"date": {
-										"value": "@substring(string(utcnow()),0,10)",
-										"type": "Expression"
-									},
-									"name": {
-										"value": "@concat(pipeline().RunId,'_',utcnow())",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"country": {
-						"type": "String",
-						"defaultValue": "pt"
-					},
-					"locale": {
-						"type": "String",
-						"defaultValue": "pt"
-					},
-					"language": {
-						"type": "String",
-						"defaultValue": "pt"
-					},
-					"max_items": {
-						"type": "String",
-						"defaultValue": "1"
-					},
-					"operation": {
-						"type": "String",
-						"defaultValue": "sale"
-					},
-					"property_type": {
-						"type": "String",
-						"defaultValue": "homes"
-					},
-					"order": {
-						"type": "String",
-						"defaultValue": "priceDown"
-					},
-					"center": {
-						"type": "String",
-						"defaultValue": "38.7252,-9.1498"
-					},
-					"distance": {
-						"type": "String",
-						"defaultValue": "60000"
-					},
-					"sort": {
-						"type": "String",
-						"defaultValue": "desc"
-					},
-					"bankOffer": {
-						"type": "String",
-						"defaultValue": "false"
-					}
-				},
-				"annotations": [],
-				"lastPublishTime": "2021-08-24T17:42:34Z"
 			},
 			"dependsOn": []
 		},
@@ -1102,7 +751,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/linkedService1HDINSIGHT')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Zipping')]",
@@ -1955,152 +1606,6 @@
 							"type": "Expression"
 						}
 					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_384')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "InputDataset",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "inputEmp.txt",
-						"container": "adftutorial"
-					},
-					"columnDelimiter": "|",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "FirstName",
-						"type": "String"
-					},
-					{
-						"name": "LastName",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/empTXT')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "InputDataset",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "emp.txt",
-						"container": "adftutorial"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "goodMovies",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DelimitedText4",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow2')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "goodMovies",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DelimitedText5",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/powerquery2')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "WranglingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"name": "AzureSqlTable102",
-							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> AzureSqlTable102",
-							"dataset": {
-								"referenceName": "AzureSqlTable102",
-								"type": "DatasetReference"
-							}
-						}
-					],
-					"script": "section Section1;\r\nshared AzureSqlTable102 = let\r\n  AdfDoc = Sql.Database(\"mysqlserveracsilva.database.windows.net\", \"myacsilvadb\", [CreateNavigationProperties = false]),\r\n  InputTable = AdfDoc{[Schema = \"SalesLT\", Item = \"SalesOrderDetail\"]}[Data]\r\nin\r\n  InputTable;\r\nshared UserQuery = let\r\n  Source = AzureSqlTable102,\r\n  #\"Reordered columns\" = Table.ReorderColumns(Source, {\"SalesOrderID\", \"OrderQty\", \"ProductID\", \"UnitPrice\", \"SalesOrderDetailID\", \"UnitPriceDiscount\", \"LineTotal\", \"rowguid\", \"ModifiedDate\"}),\r\n  #\"Removed columns\" = Table.RemoveColumns(#\"Reordered columns\", {\"SalesOrderDetailID\"}),\r\n  #\"Added custom\" = Table.AddColumn(#\"Removed columns\", \"DAY\", each Date.Day([ModifiedDate]))\r\nin\r\n  #\"Added custom\";\r\n",
-					"documentLocale": "en-us"
 				}
 			},
 			"dependsOn": []

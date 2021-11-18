@@ -98,10 +98,13 @@
 		"linkedService2_connectionString": {
 			"value": ""
 		},
+		"linkedService3_connectionString": {
+			"value": ""
+		},
 		"linkedServiceLOGSdelete_connectionString": {
 			"value": ""
 		},
-		"linkedService3_connectionString": {
+		"sql_snowflake_connectionString": {
 			"value": ""
 		},
 		"ADLS gen2_properties_typeProperties_url": {
@@ -146,8 +149,17 @@
 		"KVDataEnergyRun_properties_typeProperties_baseUrl": {
 			"value": "https://KV-Data-Energy-RUN.vault.azure.net/"
 		},
+		"Market Watch API_properties_typeProperties_url": {
+			"value": "https://marketwatch-api.hqrevenue.com/api/v1/"
+		},
 		"RESTAPIIdealista_properties_typeProperties_url": {
 			"value": "https://api.idealista.com/3.5/"
+		},
+		"RestService133_properties_typeProperties_url": {
+			"value": "https://marketwatch-api.hqrevenue.com/api/v1/"
+		},
+		"RestServiceDUMMYapi_properties_typeProperties_url": {
+			"value": "https://hub.dummyapis.com/"
 		},
 		"RestServiceIdealista_properties_typeProperties_url": {
 			"value": "https://api.idealista.com/3.5/"
