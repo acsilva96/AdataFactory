@@ -1,0 +1,21 @@
+{
+	"name": "Binary_Snowflake",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "blobSnowflake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@utcnow()",
+					"type": "Expression"
+				},
+				"container": "snowflakefiles"
+			}
+		}
+	}
+}
