@@ -47,13 +47,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Blob_Idealista'"
 		},
-		"linkedService1_connectionString": {
+		"blobSnowflake_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
+			"metadata": "Secure string for 'connectionString' of 'blobSnowflake'"
 		},
-		"linkedService2_connectionString": {
+		"AzureBlobStorage_SAS_DENY_sasUri": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'linkedService2'"
+			"metadata": "Secure string for 'sasUri' of 'AzureBlobStorage_SAS_DENY'"
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
@@ -96,6 +96,19 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage_SAS_DENY')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('AzureBlobStorage_SAS_DENY_sasUri')]"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -358,27 +371,14 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/linkedService1')]",
+			"name": "[concat(parameters('factoryName'), '/blobSnowflake')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"connectionString": "[parameters('linkedService1_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/linkedService2')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('linkedService2_connectionString')]"
+					"connectionString": "[parameters('blobSnowflake_connectionString')]"
 				}
 			},
 			"dependsOn": []

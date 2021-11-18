@@ -17,6 +17,9 @@
 		"AzureBlobStorage12_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage13_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorage2_connectionString": {
 			"value": ""
 		},
@@ -87,6 +90,9 @@
 			"value": ""
 		},
 		"Blob_Idealista_connectionString": {
+			"value": ""
+		},
+		"blobSnowflake_connectionString": {
 			"value": ""
 		},
 		"linkedService1_connectionString": {
