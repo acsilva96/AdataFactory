@@ -1,0 +1,7 @@
+{
+	"name": "AzureBlobStorage5",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/0cd04847-61eb-4fb9-8232-34a3b213b751/resourceGroups/tutorial-mappingDataFlow/providers/Microsoft.Storage/storageAccounts/thisisavalidanemstorage",
+		"groupId": "blob"
+	}
+}
