@@ -1,0 +1,25 @@
+{
+	"name": "TriggerOnNewBlobInQueue",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "MainPipeline",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/adf/blobs/queue",
+			"blobPathEndsWith": ".csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/5940eed1-7c10-4750-ae18-a78515b56c03/resourceGroups/rb-prod-rg-upn/providers/Microsoft.Storage/storageAccounts/rbprodsaupn",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

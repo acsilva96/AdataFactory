@@ -1,0 +1,37 @@
+{
+	"name": "MMSUsersIFCN",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "MmsProdIfcn",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SQL Tables"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LoginName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DisplayName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Email",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "User"
+		}
+	}
+}

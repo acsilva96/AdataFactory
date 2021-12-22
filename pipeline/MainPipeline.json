@@ -1,0 +1,570 @@
+{
+	"name": "MainPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "OAS365 SQL Users",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "UpdateOas365SqlUsers",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "MoveUpnFiles",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "OAS365 SQL Users",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "MMS SQL Users",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO ALT-PROD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "MMS SQL Users IFCN",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO MWA-PROD Checkins",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO OAS365-PROD DictionaryItems",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO DDN Drafts PROD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO BSO PROD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO ITL PROD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 4",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 5",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 6",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 7",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 8",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 9",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO NPS PROD 10",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SPO Gearbox PROD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "MoveUpnFiles",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"SourceStore_Location": "adf",
+						"SourceStore_Directory": "queue",
+						"DestinationStore_Location": "adf",
+						"DestinationStore_Directory": "processed"
+					}
+				}
+			},
+			{
+				"name": "MMS SQL Users",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "UpdateMmsSqlUsers",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "SPO ALT-PROD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "97eaf57c-c627-4d72-b506-53577e46d119",
+						"ListName": "Balances",
+						"ListColumn": "Title",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "MMS SQL Users IFCN",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "UpdateMmsSqlUsersIFCN",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "SPO MWA-PROD Checkins",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "7541f050-a290-4615-968b-33a3cdb62bc3",
+						"ListName": "Check-ins",
+						"ListColumn": "Title",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO OAS365-PROD DictionaryItems",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "f35e0591-4c5c-4f13-8919-5a93cbed4f1b",
+						"ListName": "DictionaryItems",
+						"ListColumn": "Title",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO DDN Drafts PROD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "e2ec77e8-cebf-4f3c-841d-270077691d4c",
+						"ListName": "Supply%20Complaint%20Drafts",
+						"ListColumn": "Submitted Author",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO BSO PROD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "e336c39e-6d7b-4acc-b080-a349d7b0baac",
+						"ListName": "Safety%20Observations%20Destination",
+						"ListColumn": "ObservationAuthor",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO ITL PROD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "9153268f-6dc0-4c8b-8eb3-28143f1823e1",
+						"ListName": "ITLApprovalHistory",
+						"ListColumn": "Email",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD",
+				"description": "RequestorEmailAddress",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "RequestorEmailAddress",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 2",
+				"description": "ApproverEmailAddress",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "ApproverEmailAddress",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 3",
+				"description": "RaisedBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "RaisedBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 4",
+				"description": "ApprovedBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "ApprovedBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 5",
+				"description": "InQueriedBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "InQueriedBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 6",
+				"description": "InvoicingBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "InvoicingBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 7",
+				"description": "InvoicedBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "InvoicedBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 8",
+				"description": "PostedBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "PostedBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 9",
+				"description": "PostedButDisputedBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "PostedButDisputedBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO NPS PROD 10",
+				"description": "RejectedBy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "rbcom.sharepoint.com,1d0f1929-9842-40f9-a6f2-f5e618438cec,9bbe8bb3-6e72-43df-b267-7dbe1980e1ca",
+						"ListName": "ArchiveRequests",
+						"ListColumn": "RejectedBy",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			},
+			{
+				"name": "SPO Gearbox PROD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SpoListItemUpdate",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"OasSiteId": "b21bbd00-af28-4f48-bb49-98be1ff29485",
+						"ListName": "Documents",
+						"ListColumn": "RB Approver",
+						"CsvMatchColumn": "UPN",
+						"CsvOutColumn": "NewUPN"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}

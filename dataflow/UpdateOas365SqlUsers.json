@@ -1,0 +1,42 @@
+{
+	"name": "UpdateOas365SqlUsers",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "UpnCsv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "OasProdUsersTable",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "OasProdUsersTable",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "AlterRow1"
+				}
+			],
+			"script": "source(output(\n\t\tAADObjectGuid as string,\n\t\tOldEmailAddress as string,\n\t\tOutcome as string,\n\t\tUPN as string,\n\t\tType as string,\n\t\tNewEmailAddress as string,\n\t\tNewUPN as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\twildcardPaths:['queue/*.csv']) ~> source1\nsource(output(\n\t\tId as string,\n\t\tRowVersion as binary,\n\t\tDisplayName as string,\n\t\tEmail as string,\n\t\tJobTitle as string,\n\t\tNotifyByEmail as boolean,\n\t\tNotifyByTeams as boolean,\n\t\tTenantId as string,\n\t\tBotUserId as string,\n\t\tBotConversationId as string,\n\t\tBotServiceUrl as string,\n\t\tBotConversationType as string,\n\t\tCreatedOn as string,\n\t\tModifiedOn as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource1, source2 join(lower(AADObjectGuid) == lower(Id),\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1\nJoin1 alterRow(updateIf(Outcome=='Successful')) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tId as string,\n\t\tRowVersion as binary,\n\t\tDisplayName as string,\n\t\tEmail as string,\n\t\tJobTitle as string,\n\t\tNotifyByEmail as boolean,\n\t\tNotifyByTeams as boolean,\n\t\tTenantId as string,\n\t\tBotUserId as string,\n\t\tBotConversationId as string,\n\t\tBotServiceUrl as string,\n\t\tBotConversationType as string,\n\t\tCreatedOn as string,\n\t\tModifiedOn as string\n\t),\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['Id'],\n\tskipKeyWrites:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tId,\n\t\tEmail = NewUPN\n\t)) ~> sink1"
+		}
+	}
+}

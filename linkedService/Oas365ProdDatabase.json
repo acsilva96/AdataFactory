@@ -1,0 +1,17 @@
+{
+	"name": "Oas365ProdDatabase",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AdfKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "OAS365-prod-db"
+			}
+		}
+	}
+}

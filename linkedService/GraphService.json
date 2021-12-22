@@ -1,0 +1,17 @@
+{
+	"name": "GraphService",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://graph.microsoft.com/v1.0",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "AadServicePrincipal",
+			"servicePrincipalId": "e8fae74f-9d88-45e5-b033-0abf8bcc6626",
+			"tenant": "95e66ecc-f2c2-464b-84d9-8fda407bc923",
+			"aadResourceId": "https://graph.microsoft.com",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlJHLVBST0QtQURGLVVQTl83ZDIzZWEwNi1hY2IyLTQwZDQtYjJkNy1hM2FhNzI4NmY5MDIiDQp9"
+		}
+	}
+}

@@ -1,0 +1,52 @@
+{
+	"name": "UpnCsv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobStorageV2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "queue",
+				"container": "adf"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "AADObjectGuid",
+				"type": "String"
+			},
+			{
+				"name": "OldEmailAddress",
+				"type": "String"
+			},
+			{
+				"name": "Outcome",
+				"type": "String"
+			},
+			{
+				"name": "UPN",
+				"type": "String"
+			},
+			{
+				"name": "Type",
+				"type": "String"
+			},
+			{
+				"name": "NewEmailAddress",
+				"type": "String"
+			},
+			{
+				"name": "NewUPN",
+				"type": "String"
+			}
+		]
+	}
+}

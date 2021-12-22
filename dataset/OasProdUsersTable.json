@@ -1,0 +1,78 @@
+{
+	"name": "OasProdUsersTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Oas365ProdDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SQL Tables"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "RowVersion",
+				"type": "timestamp"
+			},
+			{
+				"name": "DisplayName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Email",
+				"type": "nvarchar"
+			},
+			{
+				"name": "JobTitle",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NotifyByEmail",
+				"type": "bit"
+			},
+			{
+				"name": "NotifyByTeams",
+				"type": "bit"
+			},
+			{
+				"name": "TenantId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BotUserId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BotConversationId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BotServiceUrl",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BotConversationType",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CreatedOn",
+				"type": "datetimeoffset",
+				"scale": 7
+			},
+			{
+				"name": "ModifiedOn",
+				"type": "datetimeoffset",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Users"
+		}
+	}
+}

@@ -1,0 +1,48 @@
+{
+	"name": "UpdateMmsSqlUsersIFCN",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "UpnCsv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "MMSUsersIFCN",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "MMSUsersIFCN",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "AlterRow1"
+				},
+				{
+					"name": "DerivedColumn1"
+				},
+				{
+					"name": "DerivedColumn2"
+				}
+			],
+			"script": "source(output(\n\t\tAADObjectGuid as string,\n\t\tOldEmailAddress as string,\n\t\tOutcome as string,\n\t\tUPN as string,\n\t\tType as string,\n\t\tNewEmailAddress as string,\n\t\tNewUPN as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\twildcardPaths:['queue/*.csv']) ~> source1\nsource(output(\n\t\tId as integer,\n\t\tLoginName as string,\n\t\tDisplayName as string,\n\t\tEmail as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource1, DerivedColumn1 join(lower(source1@UPN) == lower(DerivedColumn1@UPN),\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1\nDerivedColumn2 alterRow(updateIf(Outcome=='Successful')) ~> AlterRow1\nsource2 derive(each(match(name=='LoginName'), 'UPN' = toString(split(LoginName, '|')[3]))) ~> DerivedColumn1\nJoin1 derive(LoginName = replace(LoginName, DerivedColumn1@UPN, NewUPN)) ~> DerivedColumn2\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tId as integer,\n\t\tLoginName as string,\n\t\tDisplayName as string,\n\t\tEmail as string\n\t),\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['Id'],\n\tskipKeyWrites:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tId,\n\t\tLoginName,\n\t\tEmail = NewEmailAddress\n\t)) ~> sink1"
+		}
+	}
+}

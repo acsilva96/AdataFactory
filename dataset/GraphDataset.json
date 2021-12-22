@@ -1,0 +1,29 @@
+{
+	"name": "GraphDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "GraphService",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"siteId": {
+				"type": "string"
+			},
+			"listName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "SharePoint"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "sites/@{dataset().siteId}/lists/@{dataset().listName}/items?$top=5000",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}

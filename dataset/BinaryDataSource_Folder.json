@@ -1,0 +1,36 @@
+{
+	"name": "BinaryDataSource_Folder",
+	"properties": {
+		"description": "It describes the folder in the data source store.",
+		"linkedServiceName": {
+			"referenceName": "BlobStorageV2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Container": {
+				"type": "String"
+			},
+			"Directory": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Move UPN Files"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@{dataset().Directory}",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@{dataset().Container}",
+					"type": "Expression"
+				}
+			}
+		}
+	}
+}

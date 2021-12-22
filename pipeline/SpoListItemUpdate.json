@@ -1,0 +1,91 @@
+{
+	"name": "SpoListItemUpdate",
+	"properties": {
+		"activities": [
+			{
+				"name": "UpdateSpoColumn",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "ListItemsToUpdate",
+						"type": "DataFlowReference",
+						"parameters": {
+							"updateColumn": {
+								"value": "'@{pipeline().parameters.ListColumn}'",
+								"type": "Expression"
+							},
+							"matchCsvColumn": {
+								"value": "'@{pipeline().parameters.CsvMatchColumn}'",
+								"type": "Expression"
+							},
+							"matchListColumn": {
+								"value": "'@{pipeline().parameters.ListColumn}'",
+								"type": "Expression"
+							},
+							"updateWithCsvColumn": {
+								"value": "'@{pipeline().parameters.CsvOutColumn}'",
+								"type": "Expression"
+							},
+							"oldValueCsvColumn": "'UPN'"
+						},
+						"datasetParameters": {
+							"source1": {
+								"siteId": {
+									"value": "@pipeline().parameters.OasSiteId",
+									"type": "Expression"
+								},
+								"listName": {
+									"value": "@pipeline().parameters.ListName",
+									"type": "Expression"
+								}
+							},
+							"sink1": {
+								"fileName": "out.json"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"OasSiteId": {
+				"type": "string",
+				"defaultValue": "cfb66626-61f2-4d81-bfba-d498115466af"
+			},
+			"ListName": {
+				"type": "string",
+				"defaultValue": "UserSettings"
+			},
+			"ListColumn": {
+				"type": "string",
+				"defaultValue": "Title"
+			},
+			"CsvMatchColumn": {
+				"type": "string",
+				"defaultValue": "UPN"
+			},
+			"CsvOutColumn": {
+				"type": "string",
+				"defaultValue": "NewUPN"
+			}
+		},
+		"folder": {
+			"name": "SharePoint"
+		},
+		"annotations": []
+	}
+}
