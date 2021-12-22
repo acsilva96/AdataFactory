@@ -69,9 +69,6 @@
 								"value": "@concat('Bearer',activity('Get Token').output.access_token)",
 								"type": "Expression"
 							}
-						},
-						"paginationRules": {
-							"AbsoluteUrl": ""
 						}
 					},
 					"sink": {
