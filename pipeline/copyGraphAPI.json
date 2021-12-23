@@ -29,7 +29,10 @@
 						}
 					},
 					"sink": {
-						"type": "AzureSqlSink"
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						}
 					},
 					"enableStaging": false
 				},
@@ -45,7 +48,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlTable101",
+						"referenceName": "Binary1",
 						"type": "DatasetReference"
 					}
 				]
