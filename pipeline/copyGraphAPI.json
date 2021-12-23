@@ -28,6 +28,9 @@
 							"supportRFC5988": "true"
 						}
 					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
 					"enableStaging": false
 				},
 				"inputs": [
@@ -38,6 +41,12 @@
 							"siteId": "\t @pipeline().parameters.OasSiteId",
 							"listName": "\t @pipeline().parameters.ListName"
 						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable101",
+						"type": "DatasetReference"
 					}
 				]
 			}
