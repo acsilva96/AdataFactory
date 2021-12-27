@@ -1,0 +1,25 @@
+{
+	"name": "pipeline3",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "POST https://management.azure.com/subscriptions/2F0cd04847-61eb-4fb9-8232-34a3b213b751/resourceGroups/tutorial-mappingDataFlow/providers/Microsoft.DataFactory/factories/acsivlafactory/pipelines/acsivlafactory/createRun?api-version=2017-03-01-preview",
+					"method": "POST"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
