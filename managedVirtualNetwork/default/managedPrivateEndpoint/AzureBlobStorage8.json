@@ -1,0 +1,7 @@
+{
+	"name": "AzureBlobStorage8",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/3cc7f0f0-e4fa-4b44-938d-dbac199af60f/resourceGroups/migrated-SA/providers/Microsoft.Storage/storageAccounts/acsilvamigrated",
+		"groupId": "blob"
+	}
+}
