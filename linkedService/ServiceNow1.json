@@ -5,6 +5,7 @@
 		"annotations": [],
 		"type": "ServiceNow",
 		"typeProperties": {
+			"EnableURLLog": true,
 			"endpoint": "emcitizendev.service-now.com",
 			"authenticationType": "OAuth2",
 			"username": "asdasdas",
